@@ -3,7 +3,6 @@
 
 namespace DTLib {
 
-
 class Object
 {
 public:

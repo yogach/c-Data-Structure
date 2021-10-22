@@ -1,12 +1,14 @@
 #ifndef EXCEPTION_H
 #define EXCEPTION_H
 
+#include "Object.h"
+
 namespace DTLib
 {
 
 #define THROW_EXCEPTION(e, m) (throw e(m, __FILE__, __LINE__))
 
-class Exception
+class Exception : public Object
 {
 protected:
     char* m_message;
@@ -105,6 +107,24 @@ public:
 
     InvaildParamenterException(const InvaildParamenterException& e) : Exception(e) {}
     InvaildParamenterException& operator = (const InvaildParamenterException& e)
+    {
+        Exception::operator =(e);
+
+        return *this;
+    }
+
+};
+
+
+class InvaildOperationException : public Exception
+{
+public:
+    InvaildOperationException(const char* message) : Exception(message) {}
+    InvaildOperationException(const char* file, int line) : Exception(file, line) {}
+    InvaildOperationException(const char* message, const char* file, int line) : Exception(message, file, line) {}
+
+    InvaildOperationException(const InvaildOperationException& e) : Exception(e) {}
+    InvaildOperationException& operator = (const InvaildOperationException& e)
     {
         Exception::operator =(e);
 

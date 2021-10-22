@@ -16,14 +16,17 @@ void Exception::init(const char* message, const char* file, int line)
     if( file != NULL )
     {
         char sl[16] = {0};
-
-        //itoa(line, sl, 10); //将行号转化成10进制字符串 放入sl内
-        sprintf(sl, "%d", line);
+        sprintf(sl, "%d", line);  //将行号转化成10进制字符串 放入sl内
 
         m_location = static_cast<char*>(malloc(strlen(file) + strlen(sl) + 2));
-        m_location = strcpy(m_location, file);
-        m_location = strcat(m_location, ":");
-        m_location = strcat(m_location, sl);
+
+        if( m_location != NULL ) //判断一下malloc是否成功
+        {
+            m_location = strcpy(m_location, file);
+            m_location = strcat(m_location, ":");
+            m_location = strcat(m_location, sl);
+        }
+
     }
     else
     {
