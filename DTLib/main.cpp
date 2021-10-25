@@ -1,6 +1,7 @@
 #include <iostream>
 #include "SmartPointer.h"
 #include "Exception.h"
+#include "List.h"
 
 using namespace std;
 using namespace DTLib;
@@ -9,16 +10,7 @@ using namespace DTLib;
 
 int main()
 {
-    try
-    {
-       THROW_EXCEPTION(ArithmeticException, "test");
-    }
-    catch(const ArithmeticException e)
-    {
-        cout << "const ArithmeticException e" << endl;
-        cout << e.message() << endl;
-        cout << e.location() << endl;
-    }
+    List<int> * l = NULL;
 
     return 0;
 }
