@@ -1,7 +1,6 @@
 #ifndef SEQLIST_H
 #define SEQLIST_H
 
-#include "Object.h"
 #include "List.h"
 #include "Exception.h"
 
@@ -19,9 +18,9 @@ protected:
 public:
     bool insert(int i, const T& e)
     {
-        bool ret = ( (0 <= i) && (i<=m_length) );
+        bool ret = ((0 <= i) && (i <= m_length));
 
-        ret = ret && ( (m_length + 1) < capacity() ); //检查容量是否符合要求
+        ret = ret && ( (m_length) < capacity() ); //检查容量是否符合要求
 
         if( ret )
         {
@@ -98,7 +97,7 @@ public:
         }
         else
         {
-            THROW_EXCEPTION(IndexOutOfBoundsException, "Parameter i is invaild... ")
+            THROW_EXCEPTION(IndexOutOfBoundsException, "Parameter i is invaild... ");
         }
     }
 
