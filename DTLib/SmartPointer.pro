@@ -13,4 +13,5 @@ HEADERS += \
     Object.h \
     List.h \
     SeqList.h \
-    StaticList.h
+    StaticList.h \
+    DynamicList.h
