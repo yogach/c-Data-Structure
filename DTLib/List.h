@@ -8,7 +8,12 @@ namespace DTLib {
 template <typename T>
 class List : public Object
 {
+protected:
+    //将拷贝构造函数和 = 操作符重载为protected 可以防止List对象之间的拷贝操作
+    List(const List&);
+    List& operator = (const List&);
 public:
+    List() {}
     virtual bool insert(int i, const T& e) = 0;
     virtual bool remove(int i ) = 0;
     virtual bool set(int i, const T& e) = 0;
