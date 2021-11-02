@@ -15,4 +15,5 @@ HEADERS += \
     SeqList.h \
     StaticList.h \
     DynamicList.h \
-    Array.h
+    Array.h \
+    StaticArray.h

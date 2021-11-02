@@ -1,51 +1,33 @@
 #include <iostream>
-#include "DynamicList.h"
-#include "Exception.h"
+#include "StaticArray.h"
 
 using namespace std;
 using namespace DTLib;
 
 int main()
 {
-    DynamicList<int> l(5);
+    StaticArray<int, 5> a1;
 
-    for(int i=0; i<l.capacity(); i++)
+    for(int i=0; i<a1.length(); i++)
     {
-        l.insert(0, i);
+        a1[i] = i * i;
     }
 
-    for(int i=0; i<l.length(); i++)
+    for(int i=0; i<a1.length(); i++)
     {
-        cout << l[i] << endl;
+        cout << a1[i] << endl;
     }
 
-    try
-    {
-        l[5] = 5;
-    }
-    catch(const Exception& e)
-    {
-        cout << e.message() << endl;
-        cout << e.location() << endl;
+    StaticArray<int, 5> a2;
 
-        l.resize(10);
-        l.insert(5, 501);
+    a2 = a1;
+
+    for(int i=0; i<a2.length(); i++)
+    {
+        cout << a2[i] << endl;
     }
 
-    l[5] = 5;
-
-    for(int i=0; i<l.length(); i++)
-    {
-        cout << l[i] << endl;
-    }
-
-    l.resize(3);
-
-    for(int i=0; i<l.length(); i++)
-    {
-        cout << l[i] << endl;
-    }
-
+    a2[6] = 100;
 
     return 0;
 }
