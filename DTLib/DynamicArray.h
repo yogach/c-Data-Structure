@@ -11,67 +11,73 @@ class DynamicArray : public Array<T>
 {
 protected:
     int m_length;
-public:
-    DynamicArray(int length)
-    {
-        this->m_array = new T[length];
 
-        if( this->m_array != NULL)
+    //创建一个新空间 并将数据拷贝到新空间内
+    T* copy(T* array, int length, int newLen)
+    {
+        T* ret = new T[newLen];
+
+        if( ret != NULL )
         {
+            int size = (length < newLen) ? length : newLen;
+
+            for(int i=0; i<size; i++)
+            {
+               ret[i] = array[i];
+            }
+        }
+
+        return ret;
+    }
+
+    //更新本对象内的m_array和m_length
+    void update(T* array, int length)
+    {
+        if( array != NULL )
+        {
+            T* temp = this->m_array;
+
+            this->m_array = array;
+            this->m_length = length;
+
+            delete[] temp;
+        }
+        else
+        {
+            THROW_EXCEPTION(NoEnoughMemoryException, "No memory to update DynamicArray object..");
+        }
+    }
+
+    //将一块空间设置到m_array中
+    void init(T* array, int length)
+    {
+        if( array != NULL )
+        {
+            this->m_array = array;
             this->m_length = length;
         }
         else
         {
             THROW_EXCEPTION(NoEnoughMemoryException, "No memory to create DynamicArray object..");
         }
+    }
 
+public:
+    DynamicArray(int length)
+    {
+        init(new T[length], length);
     }
 
     DynamicArray(const DynamicArray<T>& obj)
     {
-        this->m_array = new T[obj.m_length];
-
-        if( this->m_array != NULL )
-        {
-            this->m_length = obj.m_length;
-
-            for(int i=0; i<obj.m_length; i++)
-            {
-                this->m_array[i] = obj.m_array[i];
-            }
-        }
-        else
-        {
-            THROW_EXCEPTION(NoEnoughMemoryException, "No memory to copy DynamicArray object..");
-        }
+        init(copy(obj.m_array, obj.length(), obj.length()), obj.length());
     }
 
     DynamicArray<T>& operator = (const DynamicArray<T>& obj)
     {
         if( this != &obj ) //判断对象地址 避免自赋值
         {
-            T* array = new T[obj.m_length];
-
-            if( array != NULL )
-            {
-                for(int i=0; i<obj.m_length; i++)
-                {
-                    array[i] = obj.m_array[i];
-                }
-
-                T* temp = this->m_array;
-
-                this->m_array = array;
-                this->m_length = obj.m_length;
-
-                delete[] temp;
-
-            }
-            else
-            {
-                THROW_EXCEPTION(NoEnoughMemoryException, "No memory to create copy object..");
-            }
-
+            update(copy(obj.m_array, obj.length(), obj.length()), obj.length());
         }
 
         return *this;
@@ -86,29 +92,7 @@ public:
     {
         if( length != m_length )
         {
-            T* array = new T[length];
-
-            if( array != NULL )
-            {
-                int size = (length < m_length) ? length : m_length;
-
-                for(int i=0; i<size; i++)
-                {
-                    array[i] = this->m_array[i];
-                }
-
-                T* temp = this->m_array;
-
-                this->m_array = array;
-                this->m_length = length;
-
-                delete[] temp;
-
-            }
-            else
-            {
-                THROW_EXCEPTION(NoEnoughMemoryException, "No memory to resize object..");
-            }
+            update(copy(this->m_array, m_length, length), length);
         }
     }
 
