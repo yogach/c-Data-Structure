@@ -10,6 +10,8 @@ public:
     void operator delete(void* p);
     void* operator new[] (long unsigned int size) throw();
     void operator delete[] (void* p);
+    bool operator == (const Object& obj);
+    bool operator != (const Object& obj);
     virtual ~Object() = 0;   //析构函数声明成虚函数 子类将支持动态类型识别 dynamic_cast
 };
 

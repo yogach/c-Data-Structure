@@ -25,7 +25,7 @@ protected:
     }m_header;
     int m_length;
 
-    Node* position(int i) const
+    Node* position(int i) const   //O(n)
     {
         Node* ret = reinterpret_cast<Node*>(&m_header);
 
@@ -43,12 +43,12 @@ public:
         m_length = 0;
     }
 
-    bool insert(const T& e)
+    bool insert(const T& e)    //O(n)
     {
         return insert(m_length, e);
     }
 
-    bool insert(int i, const T& e)
+    bool insert(int i, const T& e) //O(n)
     {
         bool ret = ((0 <= i) && (i <= m_length));
 
@@ -75,7 +75,7 @@ public:
         return ret;
     }
 
-    bool remove(int i )
+    bool remove(int i)     //O(n)
     {
         bool ret = ((0 <= i) && (i <= m_length));
 
@@ -95,7 +95,7 @@ public:
         return ret;
     }
 
-    bool set(int i, const T& e)
+    bool set(int i, const T& e)  //O(n)
     {
         bool ret = ((0 <= i) && (i <= m_length));
 
@@ -109,7 +109,29 @@ public:
         return ret;
     }
 
-    T get(int i) const
+    int find(const T& e) const  //O(n)
+    {
+        int ret = -1;
+        int i = 0;
+        Node* node = m_header.next;
+
+        while (node) {
+            if(node->value == e)
+            {
+               ret = i;
+               break;
+            }
+            else
+            {
+                node = node->next;
+                i++;
+            }
+        }
+
+        return ret;
+    }
+
+    T get(int i) const   //O(n)
     {
         T ret = 0;
 
@@ -127,7 +149,7 @@ public:
         return ret;
     }
 
-    bool get(int i, T& e) const
+    bool get(int i, T& e) const  //O(n)
     {
         bool ret = ((0 <= i) && (i <= m_length));
 
@@ -141,12 +163,12 @@ public:
         return ret;
     }
 
-    int length() const
+    int length() const    //O(1)
     {
         return m_length;
     }
 
-    void clear()
+    void clear()    //O(n)
     {
         while ( m_header.next ) {
             Node* toDel = m_header.next;
@@ -157,7 +179,7 @@ public:
         }
     }
 
-    ~LinkList()
+    ~LinkList()      //O(n)
     {
         clear();
     }
