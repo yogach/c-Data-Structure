@@ -4,35 +4,20 @@
 using namespace std;
 using namespace DTLib;
 
-class Test : public Object
-{
-    int i;
-public:
-    Test(int v = 0)
-    {
-        i = v;
-    }
-
-    bool operator == (const Test& e)
-    {
-        return (i == e.i);
-    }
-};
 
 int main()
 {
-    Test t1(1);
-    Test t2(2);
-    Test t3(3);
+    LinkList<int> list;
 
-    LinkList<Test> list;
+    for(int i=0; i<5; i++)
+    {
+        list.insert(0, i);
+    }
 
-    list.insert(t1);
-    list.insert(t2);
-    list.insert(t3);
-
-    cout << list.find(3) << endl;
-
+    for(list.move(0); !list.end(); list.next())
+    {
+        cout << list.current() << endl;
+    }
 
     return 0;
 }
