@@ -55,6 +55,7 @@ protected:
              {
                  m_used[i] = 0;
                  psn->~SNode(); //虽然我们并没有实际定义~SNode 但其析构函数时默认创建的
+                 break;
              }
          }
     }

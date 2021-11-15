@@ -11,7 +11,7 @@ namespace DTLib {
 
 void Exception::init(const char* message, const char* file, int line)
 {
-    m_message = strdup(message); //拷贝字符串到一个新的地址内
+    m_message = ( message ? strdup(message) : NULL ); //拷贝字符串到一个新的地址内
 
     if( file != NULL )
     {
