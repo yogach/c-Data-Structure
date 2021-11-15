@@ -39,12 +39,13 @@ protected:
         return ret;
     }
 
+    //声明成virtual 则具备了多态属性
     virtual Node* create()
     {
         return new Node();
     }
 
-    virtual void destory(Node* pn)
+    virtual void destroy(Node* pn)
     {
         delete pn;
     }
@@ -102,9 +103,9 @@ public:
 
             current->next = toDel->next;
 
-            destory(toDel);
-
             m_length --;
+
+            destroy(toDel);
         }
 
         return ret;
@@ -130,7 +131,8 @@ public:
         int i = 0;
         Node* node = m_header.next;
 
-        while (node) {
+        while (node)
+        {
             if(node->value == e)
             {
                ret = i;
@@ -190,7 +192,8 @@ public:
 
             m_header.next = toDel->next;
 
-            destory(toDel);
+            m_length --;
+            destroy(toDel);
         }
     }
 

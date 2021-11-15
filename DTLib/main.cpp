@@ -1,5 +1,5 @@
 #include <iostream>
-#include "LinkList.h"
+#include "StaticLinkList.h"
 
 using namespace std;
 using namespace DTLib;
@@ -7,7 +7,7 @@ using namespace DTLib;
 
 int main()
 {
-    LinkList<int> list;
+    StaticLinkList<int, 5> list;
 
     for(int i=0; i<5; i++)
     {
