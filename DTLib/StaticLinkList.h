@@ -73,6 +73,13 @@ public:
     {
         return N;
     }
+
+    ~StaticLinkList()
+    {
+        //此处调用了父类的clear，由于在构造和析构函数中没有多态，
+        //所以clear函数中调用的destroy函数是StaticLinkList内的destroy函数
+        this->clear();
+    }
 };
 
 }
