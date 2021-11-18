@@ -16,7 +16,7 @@ public:
 
     //拷贝构造函数
     //得到对应的内存地址后 将赋值的对象设为NULL
-    SmartPointer(const SmartPointer<T>& obj)
+    SmartPointer(const SmartPointer<T>& obj) : Pointer<T>(NULL)
     {
         this->m_pointer = obj.m_pointer;
 
