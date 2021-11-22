@@ -192,35 +192,37 @@ public:
 
     void clear()    //O(n)
     {
-        while ( m_header.next ) {
+        while ( m_header.next )
+        {
             Node* toDel = m_header.next;
 
             m_header.next = toDel->next;
 
             m_length --;
-            destroy(toDel);
+
+            destroy(toDel); //为了异常安全 在最后释放空间
         }
     }
 
-    bool move(int i, int step = 1)
+    virtual bool move(int i, int step = 1)
     {
         bool ret = (0 <= i) && (i < m_length) && (step > 0);
 
         if( ret )
         {
             m_current = position(i)->next;
-            m_step = 1;
+            m_step = step;
         }
 
         return ret;
     }
 
-    bool end()
+    virtual bool end()
     {
         return (m_current == NULL);
     }
 
-    T current()
+    virtual T current()
     {
         if( !end() )
         {
@@ -233,7 +235,7 @@ public:
     }
 
     //m_current指向下一个节点
-    bool next()
+    virtual bool next()
     {
         int i = 0;
 
