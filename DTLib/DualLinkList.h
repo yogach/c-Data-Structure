@@ -177,15 +177,13 @@ public:
         return ret;
     }
 
-    T get(int i) const   //O(n)
+    virtual T get(int i) const   //O(n)
     {
         T ret = 0;
 
-        if( (0 <= i) && (i <= m_length) )
+        if( get(i, ret) )
         {
-            Node* current = position(i);
-
-            ret = current->next->value;
+            return ret;
         }
         else
         {
@@ -269,7 +267,7 @@ public:
         return (i == m_step);
     }
 
-    bool pre()
+    virtual bool pre()
     {
         int i = 0;
 

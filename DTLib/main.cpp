@@ -1,5 +1,5 @@
 #include <iostream>
-#include "DualLinkList.h"
+#include "DualCircleList.h"
 
 using namespace std;
 using namespace DTLib;
@@ -7,7 +7,7 @@ using namespace DTLib;
 
 int main()
 {
-    DualLinkList<int> dl;
+    DualCircleList<int> dl;
 
     for(int i=0; i<5; i++)
     {
@@ -19,7 +19,8 @@ int main()
 
     dl.move(dl.length() - 1);
 
-    while ( !dl.end() ) {
+    while ( dl.find(5) != -1 )
+    {
         if( dl.current() == 5)
         {
             cout << dl.current() << endl;
@@ -33,7 +34,8 @@ int main()
 
     cout << "end" << endl;
 
-    for(dl.move(0); !dl.end(); dl.next())
+    int i;
+    for(i=0, dl.move(0); !dl.end() && (i < dl.length()); dl.next(), i++)
     {
         cout << dl.current() << endl;
     }
