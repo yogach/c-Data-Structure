@@ -1,5 +1,5 @@
 #include <iostream>
-#include "DualCircleList.h"
+#include "StaticStack.h"
 
 using namespace std;
 using namespace DTLib;
@@ -7,37 +7,18 @@ using namespace DTLib;
 
 int main()
 {
-    DualCircleList<int> dl;
+    StaticStack<int, 5> stack;
 
     for(int i=0; i<5; i++)
     {
-        dl.insert(0, i);
-        dl.insert(0, 5);
+        stack.push(i);
     }
 
-    cout << "start" << endl;
-
-    dl.move(dl.length() - 1);
-
-    while ( dl.find(5) != -1 )
+    while( stack.size() > 0 )
     {
-        if( dl.current() == 5)
-        {
-            cout << dl.current() << endl;
-            dl.remove(dl.find( dl.current() ));
-        }
-        else
-        {
-            dl.pre();
-        }
-    }
+        cout << stack.top() << endl;
 
-    cout << "end" << endl;
-
-    int i;
-    for(i=0, dl.move(0); !dl.end() && (i < dl.length()); dl.next(), i++)
-    {
-        cout << dl.current() << endl;
+        stack.pop();
     }
 
     return 0;
