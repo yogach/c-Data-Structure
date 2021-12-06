@@ -11,23 +11,23 @@ template < typename T, int N >
 class StaticStack : public Stack<T>
 {
 protected:
-    T m_space[N];
+    T m_space[N]; //此处存在缺陷 当泛指类型T为类类型时，创建StaticStack时，会调用T的构造函数
     int m_top;
     int m_size;
 
 public:
-    StaticStack()
+    StaticStack()  //O(1)
     {
         m_top = -1;
         m_size = 0;
     }
 
-    int capacity() const
+    int capacity() const //O(1)
     {
         return N;
     }
 
-    void push(const T &e)
+    void push(const T &e) //O(1)
     {
         if( m_size < N )
         {
@@ -41,7 +41,7 @@ public:
         }
     }
 
-    void pop()
+    void pop()  //O(1)
     {
         if( m_size > 0 )
         {
@@ -54,7 +54,7 @@ public:
         }
     }
 
-    T top() const
+    T top() const  //O(1)
     {
         if( m_size > 0 )
         {
@@ -66,13 +66,13 @@ public:
         }
     }
 
-    void clear()
+    void clear()  //O(1)
     {
         m_top = -1;
         m_size = 0;
     }
 
-    int size() const
+    int size() const  //O(1)
     {
         return m_size;
     }
