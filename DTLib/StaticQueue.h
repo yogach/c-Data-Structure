@@ -11,25 +11,25 @@ template < typename T, int N >
 class StaticQueue : public Queue<T>
 {
 protected:
-    T m_space[N];
+    T m_space[N];  //和StaticStack类似 当泛指类型为类类型时 创建本对象时会调用泛指类型的构造函数
     int m_front;   //队列头
     int m_rear;    //队列尾
     int m_length;
 
 public:
-    StaticQueue()
+    StaticQueue()  //O(1)
     {
         m_front = 0;
         m_rear = 0;
         m_length = 0;
     }
 
-    int capacity() const
+    int capacity() const //O(1)
     {
         return N;
     }
 
-    void add(const T& e)
+    void add(const T& e) //O(1)
     {
         if( m_length < N )
         {
@@ -43,7 +43,7 @@ public:
         }
     }
 
-    void remove()
+    void remove()  //O(1)
     {
         if( m_length > 0 )
         {
@@ -56,7 +56,7 @@ public:
         }
     }
 
-    T front() const
+    T front() const  //O(1)
     {
         if( m_length > 0 )
         {
@@ -68,14 +68,14 @@ public:
         }
     }
 
-    void clear()
+    void clear()  //O(1)
     {
         m_front = 0;
         m_rear = 0;
         m_length = 0;
     }
 
-    int length() const
+    int length() const  //O(1)
     {
         return m_length;
     }
