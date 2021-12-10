@@ -29,7 +29,6 @@ public:
         INIT_LIST_HEAD(&m_header);
     }
 
-
     void add(const T& e)  //O(1)
     {
         Node* node = new Node();

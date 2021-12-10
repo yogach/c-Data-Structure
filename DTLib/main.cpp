@@ -1,23 +1,90 @@
 #include <iostream>
-#include "LinkQueue.h"
+#include "LinkStack.h"
+#include "Queue.h"
 
 using namespace std;
 using namespace DTLib;
 
-int main()
+template < typename T >
+class StackToQueue : public Queue<T>
 {
-    LinkQueue<int> lq;
+protected:
+    mutable LinkStack<T> m_stack_in;
+    mutable LinkStack<T> m_stack_out;
 
-    for(int i=0; i<5; i++)
+    void move() const
     {
-        lq.add(i);
+        if( m_stack_out.size() == 0 )
+        {
+            while( m_stack_in.size() > 0)
+            {
+                m_stack_out.push( m_stack_in.top() );
+                m_stack_in.pop();
+            }
+        }
     }
 
-    while( lq.length() > 0)
+public:
+    void add(const T& e)
     {
-        cout << lq.front() << endl;
+        m_stack_in.push(e);
+    }
 
-        lq.remove();
+    void remove()
+    {
+        move();
+
+        if( m_stack_out.size() != 0 )
+        {
+            m_stack_out.pop();
+        }
+        else
+        {
+            THROW_EXCEPTION(InvaildOperationException, "No element in current queue...");
+        }
+
+    }
+
+    T front() const
+    {
+        move();
+
+        if( m_stack_out.size() != 0 )
+        {
+            return m_stack_out.top();
+        }
+        else
+        {
+            THROW_EXCEPTION(InvaildOperationException, "No element in current queue...");
+        }
+    }
+
+    void clear()
+    {
+        m_stack_in.clear();
+        m_stack_out.clear();
+    }
+
+    int length() const
+    {
+        return m_stack_in.size() + m_stack_out.size();
+    }
+};
+
+int main()
+{
+    StackToQueue<int> sq;
+
+    for(int i=0; i<20; i++)
+    {
+        sq.add(i);
+    }
+
+    while( sq.length() > 0)
+    {
+        cout << sq.front() << endl;
+
+        sq.remove();
     }
 
     return 0;
