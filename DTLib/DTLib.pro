@@ -5,7 +5,8 @@ CONFIG -= qt
 
 SOURCES += main.cpp \
     Exception.cpp \
-    Object.cpp
+    Object.cpp \
+    DTString.cpp
 
 HEADERS += \
     SmartPointer.h \
@@ -31,4 +32,5 @@ HEADERS += \
     LinkStack.h \
     Queue.h \
     StaticQueue.h \
-    LinkQueue.h
+    LinkQueue.h \
+    DTString.h
