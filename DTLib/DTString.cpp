@@ -47,10 +47,107 @@ int String::length() const
     return m_length;
 }
 
+bool String::equal(const char* l, const char* r, int len) const
+{
+    bool ret = true;
+
+    for(int i=0; i<len; i++)
+    {
+        //当有不等于的时候直接退出
+        ret = ret && (l[i] == r[i]);
+    }
+
+    return ret;
+}
+
 const char* String::str() const
 {
     return m_str;
 }
+
+bool String::startWith(const char* s) const
+{
+    bool ret = (s != NULL);
+
+    if( ret )
+    {
+        int len = strlen(s);
+
+        //判断s的长度是否小于总的字符串长度 之后在判断两者是否相同
+        ret = (len < m_length) && equal(m_str, s, len);
+    }
+
+    return ret;
+}
+
+bool String::startWith(const String& s) const
+{
+    return startWith(s.m_str);
+}
+
+bool String::endOf(const char* s) const
+{
+    bool ret = (s != NULL);
+
+    if( ret )
+    {
+        int len = strlen(s);
+        char* str = m_str + (m_length - len);
+
+        //判断s的长度是否小于总的字符串长度 之后在判断两者是否相同
+        ret = (len < m_length) && equal(str, s, len);
+    }
+
+    return ret;
+}
+
+bool String::endOf(const String& s) const
+{
+    return endOf(s.m_str);
+}
+
+String& String::insert(int i, const char* s)
+{
+    if( (0 <= i) && (i <= m_length) )
+    {
+        //判断s不为空指针和空字符串
+        if( (s != NULL) && (s[0] != '\0') )
+        {
+            int len = strlen(s) ;
+            char* str = reinterpret_cast<char*>(malloc(len + m_length + 1));
+
+            if( str != NULL )
+            {
+                strncpy(str, m_str, i);
+                strncpy(str + i, s, len);
+                strncpy(str + i + len, m_str + i, m_length - i);
+
+                str[m_length + len] = '\0';
+
+                free(m_str);
+                m_str = str;
+                m_length = m_length + len;
+            }
+            else
+            {
+                THROW_EXCEPTION(NoEnoughMemoryException, "No enough memory to insert string...");
+            }
+
+        }
+    }
+    else
+    {
+        THROW_EXCEPTION(IndexOutOfBoundsException, "Parameter i is invaild....");
+    }
+
+    return *this;
+}
+
+String& String::insert(int i, const String& s)
+{
+    return insert(i, s.m_str);
+}
+
 
 bool String::operator == (const String& s) const
 {
@@ -187,6 +284,24 @@ String& String::operator = (char c)
 
     return (*this = s);
 }
+
+char& String::operator [](int i)
+{
+    if( (0 <= i) && (i < m_length) )
+    {
+        return m_str[i];
+    }
+    else
+    {
+        THROW_EXCEPTION(IndexOutOfBoundsException, "Parameter i is invaild....");
+    }
+}
+
+char String::operator [](int i) const
+{
+    return (const_cast<String&>(*this))[i]; //使用const_cast去除只读属性
+}
+
 
 String::~String()
 {
