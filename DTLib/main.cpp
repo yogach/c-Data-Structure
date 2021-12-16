@@ -26,5 +26,10 @@ int main()
     cout << s1.str() << endl;
 
 
+    String s2 = "  trim test ... ..   ";
+
+    cout << s2.trim().str() << endl;
+
+
     return 0;
 }
