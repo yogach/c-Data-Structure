@@ -14,6 +14,8 @@ protected:
 
     void init(const char* s);
     bool equal(const char* l, const char* r, int len) const;
+    static int* make_pmt(const char* p);
+    static int kmp(const char* s, const char* p);
 
 public:
     String();
@@ -30,6 +32,8 @@ public:
     String& insert(int i, const char* s);
     String& insert(int i, const String& s);
     String& trim();
+    int indexOf(const char* s) const;
+    int indexOf(const String& s) const;
 
     bool operator == (const String& s) const;
     bool operator == (const char* s) const;
