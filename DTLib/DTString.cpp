@@ -256,6 +256,90 @@ int String::indexOf(const String& s) const
     return kmp(m_str, s.m_str);
 }
 
+String& String::remove(int i, int len)
+{
+    if( (0 <= i) && (i < m_length) )
+    {
+        int n = i; //得到起始删除位置
+        int m = i + len; //得到结束位置
+
+        //当m大于等于最大长度 说明原字符串已经结束了
+        while( (n < m) && (m < m_length) )
+        {
+           m_str[n++] = m_str[m++];
+        }
+
+        m_str[n] = '\0';
+        m_length = n;
+    }
+
+    return *this;
+}
+
+String& String::remove(const char* s)
+{
+    return remove(indexOf(s), s ? strlen(s) : 0);
+}
+
+String& String::remove(const String& s)
+{
+    return remove(s.m_str);
+}
+
+String& String::replace(const char* t, const char* s)
+{
+    int index = indexOf(t);
+
+    //先删除 后插入
+    if( index >= 0)
+    {
+        remove(t);
+        insert(index, s);
+    }
+
+    return *this;
+}
+
+String& String::replace(const String& t, const char* s)
+{
+    return replace(t.m_str, s);
+}
+
+String& String::replace(const char* t, const String& s)
+{
+    return replace(t, s.m_str);
+}
+
+String& String::replace(const String& t, const String& s)
+{
+    return replace(t.m_str, s.m_str);
+}
+
+String String::sub(int i, int len) const
+{
+    String ret;
+
+    if( (0 <= i) && (i < m_length) )
+    {
+        if( len < 0) len = 0;
+        if( (len + i) > m_length)  len = m_length - i; //限制拷贝的最大长度不超过字符串长度
+        char* str = reinterpret_cast<char*>(malloc(len + 1));
+
+        strncpy(str, m_str+i, len);
+
+        str[len] = '\0';
+
+        ret = str;
+    }
+    else
+    {
+        THROW_EXCEPTION(IndexOutOfBoundsException, "parameter is invaild...");
+    }
+
+    return ret;
+}
+
+
 bool String::operator == (const String& s) const
 {
     return (strcmp(m_str, s.m_str) == 0);
@@ -355,6 +439,28 @@ String& String::operator += (const char* s)
 {
     return (*this = *this + s);
 }
+
+String String::operator - (const String& s) const
+{
+    //使用本对象重新创建一个String临时对象，这样能保证原对象的内容不被删除
+    return String(*this).remove(s);
+}
+
+String String::operator - (const char* s) const
+{
+    return String(*this).remove(s);
+}
+
+String& String::operator -= (const String& s)
+{
+    return remove(s);
+}
+
+String& String::operator -= (const char* s)
+{
+    return remove(s);
+}
+
 
 String& String::operator = (const String& s)
 {

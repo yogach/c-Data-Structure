@@ -8,7 +8,12 @@ using namespace DTLib;
 int main()
 {
     String s("abcdef");
+    String s1 = s - "abc";
 
-    cout << s.indexOf("cdef") << endl;
+    cout << s.str() << endl;
+    cout << s1.str() << endl;
+
+    cout << s.replace("ab", "xxxxx").str() << endl;
+
     return 0;
 }
