@@ -9,7 +9,7 @@ int main()
 {
     int a[] = {2,345,671,222,333, 10};
 
-    Sort::Select(a, 6, false);
+    Sort::Merge(a, 6, true);
 
     for(int i=0; i<6; i++)
     {
