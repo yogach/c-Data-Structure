@@ -77,6 +77,51 @@ private:
         }
     }
 
+    //找到基准元素 并将原始序列划分成一个比基准元素大 一个比基准元素小
+    template < typename T >
+    static int Partition(T array[], int begin, int end, bool min2max)
+    {
+        T pv = array[begin]; //首先找到一个基准元素
+
+        while( begin < end )
+        {
+            //从后往前查找比pv小的值
+            while( (begin < end) && (min2max ? (array[end] > pv) : (array[end] < pv)) )
+            {
+                end--;
+            }
+
+            //也可能会交换自身
+            Swap( array[begin], array[end] ); //找到则交换
+
+            //从前往后查找比pv大的值
+            while( (begin < end) && (min2max ? (array[begin] <= pv) : (array[begin] >= pv)) )
+            {
+                begin++;
+            }
+
+            //也可能会交换自身
+            Swap( array[begin], array[end] ); //找到则交换
+        }
+
+        array[begin] = pv;
+
+        return begin;
+    }
+
+    template < typename T >
+    static void Quick(T array[], int begin, int end, bool min2max)
+    {
+        //使用递归的方式分别
+        if( begin < end )
+        {
+            int pivot = Partition(array, begin, end, min2max);
+
+            Quick(array, begin, pivot-1, min2max);
+            Quick(array, pivot+1, end, min2max);
+        }
+    }
+
 public:
     //这是一个不稳定的排序算法
     template <typename T>
@@ -190,7 +235,11 @@ public:
         delete[] helper;
     }
 
-
+    template < typename T >
+    static void Quick(T array[], int len, bool min2max = true)
+    {
+        Quick(array, 0, len-1, min2max);
+    }
 
 };
 

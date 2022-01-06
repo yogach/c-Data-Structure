@@ -7,11 +7,11 @@ using namespace DTLib;
 
 int main()
 {
-    int a[] = {2,345,671,222,333, 10};
+    int a[] = {2,345,671,222,333, 10, 12 , 100, 95};
 
-    Sort::Merge(a, 6, true);
+    Sort::Quick(a, 9, false);
 
-    for(int i=0; i<6; i++)
+    for(int i=0; i<9; i++)
     {
         cout << a[i] << endl;
     }
