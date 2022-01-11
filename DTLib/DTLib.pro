@@ -37,4 +37,5 @@ HEADERS += \
     Sort.h \
     Tree.h \
     TreeNode.h \
-    GTreeNode.h
+    GTreeNode.h \
+    GTree.h

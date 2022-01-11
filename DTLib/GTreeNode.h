@@ -10,7 +10,7 @@ template < typename T >
 class GTreeNode : public TreeNode<T>
 {
 public:
-    LinkList<GTreeNode<T>* > child;
+    LinkList<GTreeNode<T>* > child; //当前节点的子节点
 };
 
 }

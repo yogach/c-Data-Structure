@@ -9,8 +9,8 @@ template < typename T >
 class TreeNode : public Object
 {
 public:
-   T value;
-   TreeNode<T>* parent;
+   T value;  //树节点中的值
+   TreeNode<T>* parent; //树节点的父指针
 
    TreeNode()
    {
@@ -19,6 +19,12 @@ public:
 
    virtual ~TreeNode();
 };
+
+template < typename T>
+TreeNode<T>::~TreeNode()
+{
+
+}
 
 }
 

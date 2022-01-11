@@ -13,7 +13,7 @@ class Tree : public Object
 protected:
     TreeNode<T>* m_root;
 public:
-    Tree() { m_root = NULL };
+    Tree() { m_root = NULL; }
     virtual bool insert(TreeNode<T>* node) = 0;
     virtual bool insert(const T& value, TreeNode<T>* parent) = 0;
     virtual SharedPointer< Tree<T> > remove(const T& value) = 0;
