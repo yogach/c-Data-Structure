@@ -3,6 +3,7 @@
 
 #include "GTreeNode.h"
 #include "Tree.h"
+#include "Exception.h"
 
 namespace DTLib
 {
@@ -25,7 +26,8 @@ class GTree : public Tree<T>
             else
             {
                 //使用递归的方式对当前节点的所有子节点进行查找
-                for(node->child.move(0); !node->child.end() && ( ret != NULL ); node->child.next())
+                //ret != NULL的时候会跳出循环 实际上就是找到第一个符合的即退出
+                for(node->child.move(0); !node->child.end() && ( ret == NULL ); node->child.next())
                 {
                     ret = find(node->child.current(), value);
                 }
@@ -48,7 +50,7 @@ class GTree : public Tree<T>
             if( node != NULL )
             {
                 //使用递归的方式对当前节点的所有子节点进行查找
-                for(node->child.move(0); !node->child.end() && ( ret != NULL ); node->child.next())
+                for(node->child.move(0); !node->child.end() && ( ret == NULL ); node->child.next())
                 {
                     ret = find(node->child.current(), obj);
                 }
@@ -58,10 +60,64 @@ class GTree : public Tree<T>
         return ret;
     }
 
+    void free(GTreeNode<T>* node)
+    {
+        if( node != NULL )
+        {
+            //使用递归的方式释放所有节点， 释放所有子节点后，再释放根节点
+            for(node->child.move(0); !node->child.end(); node->child.next())
+            {
+                free(node->child.current());
+            }
+
+            delete node;
+        }
+        else //node == NULL
+        {
+            return;
+        }
+    }
+
 public:
     bool insert(TreeNode<T>* node)
     {
         bool ret = true;
+
+        if( node != NULL )
+        {
+            //假设根节点为空
+            if( this->m_root == NULL )
+            {
+                node->parent = NULL;
+                this->m_root = node;
+            }
+            else
+            {
+                //查找需要插入节点的父节点
+                GTreeNode<T>* np = find(node->parent);
+
+                if( np != NULL )
+                {
+                    GTreeNode<T>* n = dynamic_cast<GTreeNode<T>*>(node);
+
+                    //在当前节点的子节点中查找需要插入的节点是否已存在
+                    //个人观点这里应该还是需要查找整颗树
+                    //测试后也符合预期
+                    if( np->child.find(n) < 0 )
+                    {
+                        np->child.insert(n);
+                    }
+                }
+                else
+                {
+                    THROW_EXCEPTION(InvaildOperationException, "invaild parent tree node..");
+                }
+            }
+        }
+        else
+        {
+            THROW_EXCEPTION(InvaildParamenterException, "Parameter node is NULL..");
+        }
 
         return ret;
     }
@@ -69,6 +125,20 @@ public:
     bool insert(const T& value, TreeNode<T>* parent)
     {
         bool ret = true;
+
+        GTreeNode<T>* node = new GTreeNode<T>();
+
+        if( node != NULL )
+        {
+            node->parent = parent;
+            node->value = value;
+
+            insert(node);
+        }
+        else
+        {
+            THROW_EXCEPTION(NoEnoughMemoryException, "no memory to create GTreeNode");
+        }
 
         return ret;
     }
@@ -115,6 +185,7 @@ public:
 
     void clear()
     {
+        free(root());
         this->m_root = NULL;
     }
 
