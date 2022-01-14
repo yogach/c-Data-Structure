@@ -4,6 +4,9 @@
 #include "GTreeNode.h"
 #include "Tree.h"
 #include "Exception.h"
+#include <iostream>
+
+using namespace std;
 
 namespace DTLib
 {
@@ -70,7 +73,11 @@ class GTree : public Tree<T>
                 free(node->child.current());
             }
 
-            delete node;
+            if( node->flag() == true)
+            {
+              delete node;
+            }
+
         }
         else //node == NULL
         {
@@ -126,7 +133,7 @@ public:
     {
         bool ret = true;
 
-        GTreeNode<T>* node = new GTreeNode<T>();
+        GTreeNode<T>* node = GTreeNode<T>::NewNode();
 
         if( node != NULL )
         {

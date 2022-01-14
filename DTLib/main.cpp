@@ -10,8 +10,12 @@ int main()
 {
     GTree<char> t;
     GTreeNode<char>* node = NULL;
+    GTreeNode<char> tmp;
 
-    t.insert('A', NULL);
+    tmp.value = 'A';
+    tmp.parent = NULL;
+    //t.insert('A', NULL);
+    t.insert(&tmp);
 
     node = t.find('A');
     t.insert('B', node);
@@ -37,6 +41,8 @@ int main()
 
     node = t.find('H');
     t.insert('M', node);
+
+    t.clear();
 
     char* s = "KLFGMIJ";
 
