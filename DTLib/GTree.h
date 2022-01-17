@@ -115,6 +115,70 @@ class GTree : public Tree<T>
         }
     }
 
+    int count(GTreeNode<T>* node) const
+    {
+        int ret = 0;
+
+        if(node != NULL)
+        {
+            ret = 1; //node不为空 则本身节点为1
+
+            //遍历所有的子节点数量
+            for(node->child.move(0); !node->child.end(); node->child.next())
+            {
+                ret += count(node->child.current());
+            }
+        }
+
+        return ret;
+    }
+
+    int height(GTreeNode<T>* node) const
+    {
+        int ret = 0;
+
+        if( node != NULL )
+        {
+            for(node->child.move(0); !node->child.end(); node->child.next())
+            {
+                //得到所有子节点的高度 找到其最高的高度
+                int h = height(node->child.current());
+
+                if( ret < h )
+                {
+                    ret = h;
+                }
+            }
+
+            ret = ret + 1; //加上根结点的高度
+        }
+
+        return ret;
+    }
+
+    int degree(GTreeNode<T>* node) const
+    {
+        int ret = 0;
+
+        if( node != NULL )
+        {
+            ret = node->child.length(); //得到本节点的子节点树（度数）
+
+            for(node->child.move(0); !node->child.end(); node->child.next())
+            {
+                //得到各字节点的度数
+                int d = degree(node->child.current());
+
+                if( ret < d )
+                {
+                    ret = d;
+                }
+            }
+        }
+
+        return ret;
+    }
+
 public:
     bool insert(TreeNode<T>* node)
     {
@@ -232,17 +296,17 @@ public:
 
     int degree() const
     {
-        return 0;
+        return degree(root());
     }
 
     int count() const
     {
-        return 0;
+        return count(root());
     }
 
     int height() const
     {
-        return 0;
+        return height(root());
     }
 
     void clear()

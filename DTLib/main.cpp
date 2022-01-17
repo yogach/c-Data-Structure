@@ -42,9 +42,9 @@ int main()
     node = t.find('H');
     t.insert('M', node);
 
-    SharedPointer<Tree<char>> r = t.remove('D');
+    //SharedPointer<Tree<char>> r = t.remove('D');
 
-    char* s = "KLFGMIJ";
+    /*char* s = "KLFGMIJ";
 
     for(int i=0; i<7; i++)
     {
@@ -59,7 +59,11 @@ int main()
 
         cout << endl;
     }
+    */
 
+    cout << t.count() << endl;
+    cout << t.height() << endl;
+    cout << t.degree() << endl;
 
     return 0;
 }
