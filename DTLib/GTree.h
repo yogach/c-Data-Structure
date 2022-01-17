@@ -85,6 +85,36 @@ class GTree : public Tree<T>
         }
     }
 
+    void remove(GTreeNode<T>* node, GTree<T>*& ret)
+    {
+        ret = new GTree<T>();
+
+        if( ret == NULL )
+        {
+            THROW_EXCEPTION(NoEnoughMemoryException, "No memory to create new tree.");
+        }
+        else
+        {
+            //假设删除的是根节点
+            if( root() == node )
+            {
+                this->m_root = NULL;
+            }
+            else
+            {
+                //找到需要删除节点的父节点
+                GTreeNode<T>* parent = dynamic_cast<GTreeNode<T>*>(node->parent);
+
+                //删除子节点
+                parent->child.remove(parent->child.find(node));
+
+                node->parent = NULL;
+            }
+
+            ret->m_root = node; //将需要删除的节点作为树返回
+        }
+    }
+
 public:
     bool insert(TreeNode<T>* node)
     {
@@ -152,12 +182,37 @@ public:
 
     SharedPointer< Tree<T> > remove(const T& value)
     {
-        return NULL;
+        GTree<T>* ret = NULL;
+        GTreeNode<T>* node = find(value); //查找树中是否存在有该值的节点
+
+        if( node == NULL )
+        {
+            THROW_EXCEPTION(InvaildParamenterException, "Can not find the node via parameter value..");
+        }
+        else
+        {
+            remove(node, ret);
+        }
+
+        return ret;
     }
 
     SharedPointer< Tree<T> > remove(TreeNode<T>* node)
     {
-        return NULL;
+        GTree<T>* ret = NULL;
+
+        node = find(node); //查找节点是否存在
+
+        if( node == NULL )
+        {
+            THROW_EXCEPTION(InvaildParamenterException, "Can not find the node via parameter value..");
+        }
+        else
+        {
+            remove(dynamic_cast<GTreeNode<T>*>(node), ret);
+        }
+
+        return ret;
     }
 
     GTreeNode<T>* find(const T& value) const
