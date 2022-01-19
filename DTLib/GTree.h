@@ -4,9 +4,8 @@
 #include "GTreeNode.h"
 #include "Tree.h"
 #include "Exception.h"
-#include <iostream>
+#include "LinkQueue.h"
 
-using namespace std;
 
 namespace DTLib
 {
@@ -14,6 +13,12 @@ namespace DTLib
 template < typename T >
 class GTree : public Tree<T>
 {
+protected:
+    LinkQueue<GTreeNode<T>*> m_queue;
+
+    GTree(const GTree<T>&);
+    GTree<T>& operator = (const GTree<T>&);
+
     //使用值来进行查找
     GTreeNode<T>* find(GTreeNode<T>* node, const T& value) const
     {
@@ -180,6 +185,12 @@ class GTree : public Tree<T>
     }
 
 public:
+
+    GTree()
+    {
+
+    }
+
     bool insert(TreeNode<T>* node)
     {
         bool ret = true;
@@ -256,6 +267,8 @@ public:
         else
         {
             remove(node, ret);
+
+            m_queue.clear();
         }
 
         return ret;
@@ -274,6 +287,8 @@ public:
         else
         {
             remove(dynamic_cast<GTreeNode<T>*>(node), ret);
+
+            m_queue.clear();
         }
 
         return ret;
@@ -313,6 +328,58 @@ public:
     {
         free(root());
         this->m_root = NULL;
+
+        m_queue.clear();
+    }
+
+    bool begin()
+    {
+        bool ret = (root() != NULL);
+
+        if( ret )
+        {
+            m_queue.clear(); //重新开始遍历后 清空队列
+            m_queue.add(root());
+        }
+
+        return ret;
+    }
+
+    bool end()
+    {
+        return (m_queue.length() == 0);
+    }
+
+    bool next()
+    {
+        bool ret = (m_queue.length() > 0);
+
+        if( ret )
+        {
+            GTreeNode<T>* node = m_queue.front(); //得到队列首元素
+
+            m_queue.remove(); //移除该元素
+
+            //将移除元素的子节点依次加入队列中
+            for(node->child.move(0); !node->child.end(); node->child.next())
+            {
+                m_queue.add(node->child.current());
+            }
+        }
+
+        return ret;
+    }
+
+    T current()
+    {
+        if( !end() )
+        {
+            return m_queue.front()->value;
+        }
+        else
+        {
+            THROW_EXCEPTION(InvaildOperationException, "No value in current position..");
+        }
     }
 
     ~GTree()

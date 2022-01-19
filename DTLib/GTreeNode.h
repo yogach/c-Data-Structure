@@ -4,6 +4,7 @@
 #include "Tree.h"
 #include "LinkList.h"
 
+
 namespace DTLib {
 
 template < typename T >
@@ -11,6 +12,10 @@ class GTreeNode : public TreeNode<T>
 {
 protected:
     bool m_flag;
+
+    GTreeNode(const GTreeNode<T>&);
+    GTreeNode<T>& operator = (const GTreeNode<T>&);
+
 
     void* operator new(long unsigned int size) throw()
     {

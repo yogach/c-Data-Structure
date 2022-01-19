@@ -65,5 +65,10 @@ int main()
     cout << t.height() << endl;
     cout << t.degree() << endl;
 
+    for(t.begin(); !t.end(); t.next())
+    {
+        cout << t.current() << endl;
+    }
+
     return 0;
 }
