@@ -4,8 +4,6 @@
 using namespace std;
 using namespace DTLib;
 
-
-
 int main()
 {
     GTree<char> t;
