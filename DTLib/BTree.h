@@ -10,6 +10,13 @@
 namespace DTLib
 {
 
+enum BTNodePos
+{
+    ANY,
+    LEFT,
+    RIGHT
+};
+
 template < typename T >
 class BTree : public Tree<T>
 {
@@ -70,17 +77,126 @@ protected:
 
         return ret;
     }
+
+    virtual bool insert(BTreeNode<T>* n, BTreeNode<T>* np, BTNodePos pos)
+    {
+        bool ret = true;
+
+        //按位置进行插入 如果对应位置上不为空 则插入失败
+        if( pos == ANY )
+        {
+            if( np->left == NULL )
+            {
+                np->left = n;
+            }
+            else if( np->right == NULL )
+            {
+                np->right = n;
+            }
+            else
+            {
+                ret = false;
+            }
+        }
+        else if( pos == LEFT )
+        {
+            if( np->left == NULL )
+            {
+                np->left = n;
+            }
+            else
+            {
+                ret = false;
+            }
+        }
+        else if( pos == RIGHT )
+        {
+            if( np->right == NULL )
+            {
+                np->right = n;
+            }
+            else
+            {
+                ret = false;
+            }
+        }
+        else
+        {
+            ret = false;
+        }
+
+        return ret;
+    }
+
 public:
     bool insert(TreeNode<T>* node)
     {
-        int ret = true;
+        return insert(node, ANY);
+    }
+
+    virtual bool insert(TreeNode<T>* node, BTNodePos pos)
+    {
+        bool ret = true;
+
+        if( node != NULL )
+        {
+            //如果根结点为空
+            if( this->m_root == NULL )
+            {
+                node->parent = NULL;
+                this->m_root = node;
+            }
+            else
+            {
+                //在树中查找需要插入节点的父节点
+                BTreeNode<T>* np = find(node->parent);
+
+                if( np != NULL )
+                {
+                    ret = insert(dynamic_cast<BTreeNode<T>*>(node), np, pos);
+                }
+                else
+                {
+                    THROW_EXCEPTION(InvaildParamenterException, "Invaild parent tree node...");
+                }
+            }
+        }
+        else
+        {
+            THROW_EXCEPTION(InvaildParamenterException, "Parameter node can not be NULL...");
+        }
 
         return ret;
     }
 
     bool insert(const T& value, TreeNode<T>* parent)
     {
-        int ret = true;
+        return insert(value, parent, ANY);
+    }
+
+    virtual bool insert(const T& value, TreeNode<T>* parent, BTNodePos pos)
+    {
+        bool ret = true;
+        BTreeNode<T>* node = BTreeNode<T>::NewNode();
+
+        if( node == NULL )
+        {
+            THROW_EXCEPTION(NoEnoughMemoryException, "No memory to create BTreeNode..");
+        }
+        else
+        {
+            node->value = value;
+            node->parent = parent;
+
+            ret = insert(node, pos);
+
+            //如果插入失败 则需要释放之前申请的BTreeNode对象
+            if( !ret )
+            {
+                delete node;
+            }
+        }
+
 
         return ret;
     }
