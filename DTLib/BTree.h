@@ -128,6 +128,58 @@ protected:
         return ret;
     }
 
+    virtual void remove(BTreeNode<T>* node, BTree<T>*& ret)
+    {
+        ret = new BTree<T>();
+
+        if( ret == NULL )
+        {
+            THROW_EXCEPTION(NoEnoughMemoryException, "No memory to create new tree...");
+        }
+        else
+        {
+            //如果需要删除的根节点 直接删除
+            if( root() == node)
+            {
+                this->m_root = NULL;
+            }
+            else
+            {
+                BTreeNode<T>* parent = dynamic_cast<BTreeNode<T>*>(node->parent);
+
+                if( parent->left == node )
+                {
+                    parent->left = NULL;
+                }
+                else if( parent->right == node)
+                {
+                    parent->right = NULL;
+                }
+
+                node->parent = NULL;
+
+            }
+
+            //将删除节点作为树返回
+            ret->m_root = node;
+        }
+    }
+
+    virtual void free(BTreeNode<T>* node)
+    {
+        //如果node不为空 递归释放
+        if( node != NULL )
+        {
+            free(node->left);
+            free(node->right);
+
+            if( node->flag() )
+            {
+                delete node;
+            }
+        }
+    }
+
 public:
     bool insert(TreeNode<T>* node)
     {
@@ -197,18 +249,44 @@ public:
             }
         }
 
-
         return ret;
     }
 
     SharedPointer< Tree<T> > remove(const T& value)
     {
-        return NULL;
+        BTree<T>* ret = NULL;
+        BTreeNode<T>* node = find(value);
+
+        if( node == NULL )
+        {
+            THROW_EXCEPTION(InvaildParamenterException, "Can not find the tree node via value...");
+        }
+        else
+        {
+            remove(node, ret);
+        }
+
+        return ret;
     }
 
     SharedPointer< Tree<T> > remove(TreeNode<T>* node)
     {
-        return NULL;
+        BTree<T>* ret = NULL;
+
+        //对需要删除的节点进行查找
+        node = find(node);
+
+        //如果可以找到则进行删除操作
+        if( node == NULL )
+        {
+            THROW_EXCEPTION(InvaildParamenterException, "parameter node is invaild...");
+        }
+        else
+        {
+            remove(dynamic_cast<BTreeNode<T>*>(node), ret);
+        }
+
+        return ret;
     }
 
     BTreeNode<T>* find(const T& value) const
@@ -243,6 +321,8 @@ public:
 
     void clear()
     {
+        free(root());
+
         this->m_root = NULL;
     }
 
