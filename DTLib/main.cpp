@@ -31,7 +31,7 @@ int main()
     bt.insert(6, n);
     bt.insert(7, n);
 
-    bt.clear();
+    cout << bt.count() << endl;
 
     int a[] = {8, 9, 10, 6, 7};
 

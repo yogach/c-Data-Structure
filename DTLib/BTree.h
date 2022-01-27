@@ -180,6 +180,18 @@ protected:
         }
     }
 
+    int count(BTreeNode<T>* node) const
+    {
+        int ret = 0;
+
+        if( node != NULL )
+        {
+            ret = count(node->left) + count(node->right) + 1;
+        }
+
+        return ret;
+    }
+
 public:
     bool insert(TreeNode<T>* node)
     {
@@ -311,7 +323,7 @@ public:
 
     int count() const
     {
-        return NULL;
+        return count(root());
     }
 
     int height() const
