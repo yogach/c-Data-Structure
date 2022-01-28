@@ -1,12 +1,10 @@
 #include "Object.h"
-#include <cstdlib>
 
-using namespace std;
 
 namespace DTLib {
 
 //throw关键字代表 此函数不会抛出异常
-void* Object::operator new(long unsigned int size) throw()
+void* Object::operator new(size_t size) throw()
 {
     return malloc(size);
 }
@@ -16,7 +14,7 @@ void Object::operator delete(void* p)
     free(p);
 }
 
-void* Object::operator new[] (long unsigned int size) throw()
+void* Object::operator new[] (size_t size) throw()
 {
     return malloc(size);
 }

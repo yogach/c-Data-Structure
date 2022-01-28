@@ -1,14 +1,18 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
+#include <cstdlib>
+
+using namespace std;
+
 namespace DTLib {
 
 class Object
 {
 public:
-    void* operator new(long unsigned int size) throw(); //带throw() 代表此函数不会抛出异常
+    void* operator new(size_t size) throw(); //带throw() 代表此函数不会抛出异常
     void operator delete(void* p);
-    void* operator new[] (long unsigned int size) throw();
+    void* operator new[] (size_t size) throw();
     void operator delete[] (void* p);
     bool operator == (const Object& obj);
     bool operator != (const Object& obj);
