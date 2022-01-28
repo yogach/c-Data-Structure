@@ -1,5 +1,0 @@
-#ifndef GTREE_H
-#define GTREE_H
-
-#include "GTreeNode.h"
-#endif // GTREE_H

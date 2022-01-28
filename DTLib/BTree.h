@@ -192,6 +192,50 @@ protected:
         return ret;
     }
 
+    int height(BTreeNode<T>* node) const
+    {
+        int ret = 0;
+
+        if( node != NULL )
+        {
+            //递归的得到左边子树和右边子树的高度
+            int lh = height(node->left);
+            int lr = height(node->right);
+
+            //得到两个子树中的最大高度 加上当前节点
+            ret = ((lr > lh) ? lr : lh) + 1;
+        }
+
+        return ret;
+    }
+
+    int degree(BTreeNode<T>* node) const
+    {
+        int ret = 0;
+
+        if( node != NULL )
+        {
+            BTreeNode<T>* child[] = {node->left, node->right};
+
+            //假设node->left为非0 第一个!将其转化为0 第二个!将其转化为1
+            //这样就可以判断左节点和右节点是否存在
+            ret = ( !!node->left + !!node->right );
+
+            //只有在度数小于2时才进行循环 因为二叉树的性质得到最大节点只能为2
+            for(int i=0; (i<2) && (ret<2); i++)
+            {
+                int d = degree(child[i]);
+
+                if( ret < d )
+                {
+                    ret = d;
+                }
+            }
+        }
+
+        return ret;
+    }
+
 public:
     bool insert(TreeNode<T>* node)
     {
@@ -318,7 +362,7 @@ public:
 
     int degree() const
     {
-        return NULL;
+        return degree(root());
     }
 
     int count() const
@@ -328,7 +372,7 @@ public:
 
     int height() const
     {
-        return NULL;
+        return height(root());
     }
 
     void clear()

@@ -32,6 +32,8 @@ int main()
     bt.insert(7, n);
 
     cout << bt.count() << endl;
+    cout << bt.height() << endl;
+    cout << bt.degree() << endl;
 
     int a[] = {8, 9, 10, 6, 7};
 
