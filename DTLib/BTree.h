@@ -21,6 +21,7 @@ template < typename T >
 class BTree : public Tree<T>
 {
 protected:
+    LinkQueue<BTreeNode<T>*> m_queue;
     virtual BTreeNode<T>* find(BTreeNode<T>* node, const T& value) const
     {
         BTreeNode<T>* ret = NULL;
@@ -320,6 +321,7 @@ public:
         else
         {
             remove(node, ret);
+            m_queue.clear();
         }
 
         return ret;
@@ -340,6 +342,7 @@ public:
         else
         {
             remove(dynamic_cast<BTreeNode<T>*>(node), ret);
+            m_queue.clear();
         }
 
         return ret;
@@ -379,8 +382,66 @@ public:
     {
         free(root());
 
+        m_queue.clear();
+
         this->m_root = NULL;
     }
+
+    bool begin()
+    {
+        bool ret = (root() != NULL);
+
+        if( ret )
+        {
+            m_queue.clear(); //重新开始遍历后 清空队列
+            m_queue.add(root());
+        }
+
+        return ret;
+    }
+
+    bool end()
+    {
+        return (m_queue.length() == 0);
+    }
+
+    bool next()
+    {
+        bool ret = (m_queue.length() > 0);
+
+        if( ret )
+        {
+            BTreeNode<T>* node = m_queue.front(); //得到队列首元素
+
+            m_queue.remove(); //移除该元素
+
+            if( node->left != NULL )
+            {
+                m_queue.add(node->left);
+            }
+
+            if( node->right != NULL )
+            {
+                m_queue.add(node->right);
+            }
+
+        }
+
+        return ret;
+    }
+
+    T current()
+    {
+        if( !end() )
+        {
+            return m_queue.front()->value;
+        }
+        else
+        {
+            THROW_EXCEPTION(InvaildOperationException, "No value in current position..");
+        }
+    }
+
 
     ~BTree()
     {

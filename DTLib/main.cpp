@@ -35,7 +35,8 @@ int main()
     cout << bt.height() << endl;
     cout << bt.degree() << endl;
 
-    int a[] = {8, 9, 10, 6, 7};
+    cout << endl;
+    /*int a[] = {8, 9, 10, 6, 7};
 
     //SharedPointer< Tree<int> > sp = bt.remove(3);
 
@@ -50,6 +51,12 @@ int main()
         }
 
         cout << endl;
+    }
+    */
+
+    for(bt.begin(); !bt.end(); bt.next())
+    {
+        cout << bt.current() << " ";
     }
 
     return 0;
