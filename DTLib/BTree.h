@@ -5,16 +5,16 @@
 #include "Tree.h"
 #include "Exception.h"
 #include "LinkQueue.h"
-
+#include "DynamicArray.h"
 
 namespace DTLib
 {
 
-enum BTNodePos
+enum BTTraversal
 {
-    ANY,
-    LEFT,
-    RIGHT
+    PreOrder,
+    InOrder,
+    PostOrder,
 };
 
 template < typename T >
@@ -237,6 +237,42 @@ protected:
         return ret;
     }
 
+    //先序遍历
+    void preOrderTraversal(BTreeNode<T>* node, LinkQueue<BTreeNode<T>*>& queue) const
+    {
+        if( node != NULL )
+        {
+            //先访问节点的值 之后遍历左子树 再之后遍历右子树
+            queue.add(node);
+            preOrderTraversal(node->left, queue);
+            preOrderTraversal(node->right, queue);
+        }
+    }
+
+    //中序遍历
+    void InOrderTraversal(BTreeNode<T>* node, LinkQueue<BTreeNode<T>*>& queue) const
+    {
+        if( node != NULL )
+        {
+            //先遍历左子树 之后访问节点的值 再之后遍历右子树
+            InOrderTraversal(node->left, queue);
+            queue.add(node);
+            InOrderTraversal(node->right, queue);
+        }
+    }
+
+    //后序遍历
+    void postOrderTraversal(BTreeNode<T>* node, LinkQueue<BTreeNode<T>*>& queue) const
+    {
+        if( node != NULL )
+        {
+            //先遍历左子树 再之后遍历右子树 最后访问节点的值
+            postOrderTraversal(node->left, queue);
+            postOrderTraversal(node->right, queue);
+            queue.add(node);
+        }
+    }
+
 public:
     bool insert(TreeNode<T>* node)
     {
@@ -442,6 +478,44 @@ public:
         }
     }
 
+    SharedPointer< Array<T> > traversal(BTTraversal order)
+    {
+        DynamicArray<T>* ret = NULL;
+        LinkQueue<BTreeNode<T>*> queue;
+
+        switch(order)
+        {
+        case PreOrder:
+            preOrderTraversal(root(), queue);
+            break;
+        case InOrder:
+            InOrderTraversal(root(), queue);
+            break;
+        case PostOrder:
+            postOrderTraversal(root(), queue);
+            break;
+        default:
+            THROW_EXCEPTION(InvaildParamenterException, "Parameter order is invaild...");
+            break;
+        }
+
+        ret = new DynamicArray<T>(queue.length()); //动态数组长度设置为queue的长度
+
+        if( ret != NULL )
+        {
+            //将queue的数据依次写入ret array内
+            for(int i=0; i<ret->length(); i++, queue.remove())
+            {
+                ret->set(i, queue.front()->value);
+            }
+        }
+        else
+        {
+            THROW_EXCEPTION(NoEnoughMemoryException, "No memory to create return array...");
+        }
+
+        return ret;
+    }
 
     ~BTree()
     {

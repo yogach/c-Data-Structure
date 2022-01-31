@@ -52,11 +52,20 @@ int main()
 
         cout << endl;
     }
-    */
+
 
     for(bt.begin(); !bt.end(); bt.next())
     {
         cout << bt.current() << " ";
+    }*/
+
+    SharedPointer< Array<int> > sp = NULL;
+
+    sp = bt.traversal(PreOrder);
+
+    for(int i=0; i<(*sp).length(); i++)
+    {
+        cout << (*sp)[i] << " ";
     }
 
     return 0;
