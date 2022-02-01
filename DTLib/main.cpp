@@ -36,10 +36,12 @@ int main()
     cout << bt.degree() << endl;
 
     cout << endl;
-    /*int a[] = {8, 9, 10, 6, 7};
 
-    //SharedPointer< Tree<int> > sp = bt.remove(3);
+    SharedPointer< BTree<int> > btClone = bt.clone();
 
+    int a[] = {8, 9, 10, 6, 7};
+
+    cout << "Old BTree" << endl;
     for(int i=0; i<5; i++)
     {
         TreeNode<int>* node = bt.find(a[i]);
@@ -53,20 +55,25 @@ int main()
         cout << endl;
     }
 
+    cout << endl;
 
-    for(bt.begin(); !bt.end(); bt.next())
+    cout << "Clone BTree" << endl;
+    for(int i=0; i<5; i++)
     {
-        cout << bt.current() << " ";
-    }*/
+        TreeNode<int>* node = btClone->find(a[i]);
 
-    SharedPointer< Array<int> > sp = NULL;
+        while (node)
+        {
+            cout << node->value << " ";
+            node = node->parent;
+        }
 
-    sp = bt.traversal(PreOrder);
-
-    for(int i=0; i<(*sp).length(); i++)
-    {
-        cout << (*sp)[i] << " ";
+        cout << endl;
     }
+
+    cout << endl;
+
+    cout << "bt == *btClone " << (bt == *btClone) << endl;
 
     return 0;
 }

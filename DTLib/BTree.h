@@ -273,6 +273,58 @@ protected:
         }
     }
 
+    BTreeNode<T>* clone(BTreeNode<T>* node) const
+    {
+        BTreeNode<T>* ret = NULL;
+
+        if( ret != NULL )
+        {
+            //首先分配一个树节点 作为根节点
+            ret = BTreeNode<T>::NewNode();
+
+            if( ret != NULL )
+            {
+                ret->value = node->value; //赋值
+
+                //递归的方式clone左子树和右子树
+                ret->left = clone(node->left);
+                ret->right = clone(node->right);
+
+                //处理子节点的父子关系
+                if( ret->left != NULL )
+                {
+                    ret->left->parent = ret;
+                }
+
+                if( ret->right != NULL )
+                {
+                    ret->right->parent = ret;
+                }
+            }
+            else
+            {
+                THROW_EXCEPTION(NoEnoughMemoryException, "No memory to create new node...");
+            }
+        }
+    }
+
+    bool equal(BTreeNode<T>* lh, BTreeNode<T>* rh) const
+    {
+        if( lh == rh ) //如果两者地址相等 直接返回true
+        {
+            return true;
+        }
+        else if( (lh != NULL) && (rh != NULL ) )
+        {
+            //判断节点值是否相等 递归的判断左子树和右子树是否相等
+            return (lh->value == rh->value) && equal(lh->left, rh->left) && equal(lh->right, rh->right);
+        }
+        else //else内的情况 则是lh 或 rh的其中一个为NULL的情况
+        {
+            return false;
+        }
+    }
+
 public:
     bool insert(TreeNode<T>* node)
     {
@@ -515,6 +567,33 @@ public:
         }
 
         return ret;
+    }
+
+    SharedPointer< BTree<T> > clone() const
+    {
+        BTree<T>* ret = new BTree();
+
+        if( ret != NULL )
+        {
+            ret->m_root = clone(root());
+        }
+        else
+        {
+            THROW_EXCEPTION(NoEnoughMemoryException, "No memory to create new tree...");
+        }
+
+        return ret;
+    }
+
+    //如果不使用引用调用 则会触发拷贝构造
+    bool operator == (const BTree<T>& btree)
+    {
+        return equal(root(), btree.root());
+    }
+
+    bool operator != (const BTree<T>& btree)
+    {
+        return !((*this) == btree);
     }
 
     ~BTree()
