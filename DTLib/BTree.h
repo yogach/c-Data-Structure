@@ -277,7 +277,7 @@ protected:
     {
         BTreeNode<T>* ret = NULL;
 
-        if( ret != NULL )
+        if( node != NULL )
         {
             //首先分配一个树节点 作为根节点
             ret = BTreeNode<T>::NewNode();
@@ -306,6 +306,8 @@ protected:
                 THROW_EXCEPTION(NoEnoughMemoryException, "No memory to create new node...");
             }
         }
+
+        return ret;
     }
 
     bool equal(BTreeNode<T>* lh, BTreeNode<T>* rh) const
@@ -323,6 +325,53 @@ protected:
         {
             return false;
         }
+    }
+
+    BTreeNode<T>* add(BTreeNode<T>* lh, BTreeNode<T>* rh) const
+    {
+        BTreeNode<T>* ret = NULL;
+
+        //如果左子树为空 右子树不为空 直接clone右子树
+        if( (lh == NULL) && (rh != NULL) )
+        {
+            ret = clone(rh);
+        }
+        else if( (lh != NULL) && (rh == NULL) )
+        {
+            ret = clone(lh);
+        }
+        else if( (lh != NULL) && (rh != NULL) )
+        {
+            ret = BTreeNode<T>::NewNode();
+
+            if( ret != NULL )
+            {
+                //节点的值为左右节点的和
+                ret->value = lh->value + rh->value;
+
+                //递归的调用add函数 得到左右子节点
+                ret->left = add(lh->left, rh->left);
+                ret->right = add(lh->right, rh->right);
+
+                //处理左右子树的父子关系
+                if( ret->left != NULL )
+                {
+                    ret->left->parent = ret;
+                }
+
+                if( ret->right != NULL )
+                {
+                    ret->right->parent = ret;
+                }
+
+            }
+            else
+            {
+                THROW_EXCEPTION(NoEnoughMemoryException, "No memory to create new BTreeNode...");
+            }
+        }
+
+        return ret;
     }
 
 public:
@@ -594,6 +643,22 @@ public:
     bool operator != (const BTree<T>& btree)
     {
         return !((*this) == btree);
+    }
+
+    SharedPointer< BTree<T> > add(const BTree<T>& btree) const
+    {
+        BTree<T>* ret = new BTree<T>();
+
+        if( ret != NULL )
+        {
+            ret->m_root = add(root(), btree.root());
+        }
+        else
+        {
+            THROW_EXCEPTION(NoEnoughMemoryException, "No memory to create new BTree");
+        }
+
+        return ret;
     }
 
     ~BTree()

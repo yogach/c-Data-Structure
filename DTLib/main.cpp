@@ -37,43 +37,32 @@ int main()
 
     cout << endl;
 
-    SharedPointer< BTree<int> > btClone = bt.clone();
+    BTree<int> nbt;
 
-    int a[] = {8, 9, 10, 6, 7};
+    nbt.insert(0, NULL);
 
-    cout << "Old BTree" << endl;
-    for(int i=0; i<5; i++)
+    n = nbt.find(0);
+    nbt.insert(6, n);
+    nbt.insert(2, n);
+
+    n = nbt.find(2);
+    nbt.insert(7, n);
+    nbt.insert(8, n);
+
+    SharedPointer< BTree<int> > t = bt.add(nbt);
+
+   /* SharedPointer< Array<int> > r = t->traversal(PreOrder);
+
+    for(int i=0; i<r->length(); i++)
     {
-        TreeNode<int>* node = bt.find(a[i]);
+        cout << (*r)[i] << " ";
+    }*/
 
-        while (node)
-        {
-            cout << node->value << " ";
-            node = node->parent;
-        }
-
-        cout << endl;
+    for(t->begin(); !t->end(); t->next())
+    {
+        cout << t->current() << " " ;
     }
 
-    cout << endl;
-
-    cout << "Clone BTree" << endl;
-    for(int i=0; i<5; i++)
-    {
-        TreeNode<int>* node = btClone->find(a[i]);
-
-        while (node)
-        {
-            cout << node->value << " ";
-            node = node->parent;
-        }
-
-        cout << endl;
-    }
-
-    cout << endl;
-
-    cout << "bt == *btClone " << (bt == *btClone) << endl;
 
     return 0;
 }
