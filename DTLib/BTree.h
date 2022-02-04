@@ -15,6 +15,7 @@ enum BTTraversal
     PreOrder,
     InOrder,
     PostOrder,
+    LevelOrder,
 };
 
 template < typename T >
@@ -273,6 +274,36 @@ protected:
         }
     }
 
+    void levelOrderTraversal(BTreeNode<T>* node, LinkQueue<BTreeNode<T>*>& queue) const
+    {
+        if( node != NULL )
+        {
+            LinkQueue<BTreeNode<T>*> tmp;
+
+            tmp.add(node); //将节点加入队列
+
+            while( tmp.length() > 0 )
+            {
+                BTreeNode<T>* n = tmp.front(); //得到队列首节点
+
+                //将首节点的左右节点加入队列
+                if( n->left != NULL )
+                {
+                    tmp.add(n->left);
+                }
+
+                if( n->right != NULL )
+                {
+                    tmp.add(n->right);
+                }
+
+                //tmp出队列 queue进队列
+                tmp.remove();
+                queue.add(n);
+            }
+        }
+    }
+
     BTreeNode<T>* clone(BTreeNode<T>* node) const
     {
         BTreeNode<T>* ret = NULL;
@@ -368,6 +399,57 @@ protected:
             else
             {
                 THROW_EXCEPTION(NoEnoughMemoryException, "No memory to create new BTreeNode...");
+            }
+        }
+
+        return ret;
+    }
+
+    //遍历函数
+    void traversal(BTTraversal order, LinkQueue<BTreeNode<T>*>& queue)
+    {
+        switch(order)
+        {
+            case PreOrder:
+                preOrderTraversal(root(), queue);
+                break;
+            case InOrder:
+                InOrderTraversal(root(), queue);
+                break;
+            case PostOrder:
+                postOrderTraversal(root(), queue);
+                break;
+            case LevelOrder:
+                levelOrderTraversal(root(), queue);
+                break;
+            default:
+                THROW_EXCEPTION(InvaildParamenterException, "Parameter order is invaild...");
+                break;
+        }
+    }
+
+    BTreeNode<T>* connect(LinkQueue<BTreeNode<T>*>& queue)
+    {
+        BTreeNode<T>* ret = NULL;
+
+        if( queue.length() > 0)
+        {
+            ret = queue.front();
+
+            BTreeNode<T>* slider = NULL;
+
+            //slider指向首节点
+            slider = queue.front();
+            queue.remove();
+            slider->left = NULL;
+
+            //当队列不为空时 循环进行队列头的指向工作
+            while( queue.length() > 0 )
+            {
+                slider->right = queue.front();
+                queue.front()->left = slider;
+                slider = queue.front();
+                queue.remove();
             }
         }
 
@@ -584,21 +666,7 @@ public:
         DynamicArray<T>* ret = NULL;
         LinkQueue<BTreeNode<T>*> queue;
 
-        switch(order)
-        {
-        case PreOrder:
-            preOrderTraversal(root(), queue);
-            break;
-        case InOrder:
-            InOrderTraversal(root(), queue);
-            break;
-        case PostOrder:
-            postOrderTraversal(root(), queue);
-            break;
-        default:
-            THROW_EXCEPTION(InvaildParamenterException, "Parameter order is invaild...");
-            break;
-        }
+        traversal(order, queue);
 
         ret = new DynamicArray<T>(queue.length()); //动态数组长度设置为queue的长度
 
@@ -657,6 +725,26 @@ public:
         {
             THROW_EXCEPTION(NoEnoughMemoryException, "No memory to create new BTree");
         }
+
+        return ret;
+    }
+
+    BTreeNode<T>* thread(BTTraversal order)
+    {
+        BTreeNode<T>* ret = NULL;
+
+        LinkQueue<BTreeNode<T>*> queue;
+
+        //首先执行遍历 结果保存在queue中
+        traversal(order, queue);
+
+        //执行线索化连接
+        ret = connect(queue);
+
+        //将原先的树设置为空树
+        this->m_root = NULL;
+
+        m_queue.clear();
 
         return ret;
     }

@@ -49,20 +49,30 @@ int main()
     nbt.insert(7, n);
     nbt.insert(8, n);
 
-    SharedPointer< BTree<int> > t = bt.add(nbt);
+  /*  SharedPointer< BTree<int> > t = bt.add(nbt);
 
-   /* SharedPointer< Array<int> > r = t->traversal(PreOrder);
+    SharedPointer< Array<int> > r = t->traversal(LevelOrder);
 
     for(int i=0; i<r->length(); i++)
     {
         cout << (*r)[i] << " ";
-    }*/
+    }
+*/
 
-    for(t->begin(); !t->end(); t->next())
+    BTreeNode<int>* tmp = bt.thread(LevelOrder);
+
+    BTreeNode<int>* head = tmp;
+
+    while( head->right != NULL )
     {
-        cout << t->current() << " " ;
+        head = head->right;
     }
 
+    while (head != NULL)
+    {
+        cout << head->value << " ";
+        head = head->left;
+    }
 
     return 0;
 }
