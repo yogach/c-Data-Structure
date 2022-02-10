@@ -40,4 +40,5 @@ HEADERS += \
     GTreeNode.h \
     GTree.h \
     BTree.h \
-    BTreeNode.h
+    BTreeNode.h \
+    Graph.h
