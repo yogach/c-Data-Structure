@@ -122,9 +122,7 @@ public:
 
         if( ret )
         {
-            Node* current = position(i);
-
-            current->next->value = e;
+            position(i)->next->value = e;
         }
 
         return ret;

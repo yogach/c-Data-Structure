@@ -42,4 +42,5 @@ HEADERS += \
     BTree.h \
     BTreeNode.h \
     Graph.h \
-    MatrixGraph.h
+    MatrixGraph.h \
+    ListGraph.h
