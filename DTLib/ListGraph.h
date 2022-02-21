@@ -37,7 +37,7 @@ public:
     }
 
     //新增顶点 只能加在最后
-    int addVertex()
+    int addVertex()   //O(n)
     {
         int ret = -1;
         Vertex* v = new Vertex();
@@ -69,7 +69,7 @@ public:
         return ret;
     }
 
-    bool setVertex(int i, const V& value)
+    bool setVertex(int i, const V& value) //O(n)
     {
         bool ret = ( (0 <= i) && (i < vCount()) );
 
@@ -99,7 +99,7 @@ public:
         return ret;
     }
 
-    V getVertex(int i)
+    V getVertex(int i) //O(n)
     {
         V ret;
 
@@ -111,7 +111,7 @@ public:
         return ret;
     }
 
-    bool getVertex(int i, V& value)
+    bool getVertex(int i, V& value) //O(n)
     {
         bool ret = ( (0 <= i) && (i < vCount()) );
 
@@ -133,13 +133,12 @@ public:
     }
 
     //只能移除最后一个添加的节点
-    void removeVertex()
+    void removeVertex()  //O(n*n)
     {
         if( m_list.length() > 0 )
         {
             int index = m_list.length() - 1;
             Vertex* v = m_list.get(index);
-
 
             if( m_list.remove(index) )
             {
@@ -166,7 +165,7 @@ public:
         }
     }
     
-    SharedPointer< Array<int> > getAdjacent(int i)
+    SharedPointer< Array<int> > getAdjacent(int i) //O(n)
     {
         DynamicArray<int>* ret = NULL;
         
@@ -208,7 +207,7 @@ public:
         return ret;
     }
     
-    bool getEdge(int i, int j, E& value)
+    bool getEdge(int i, int j, E& value) //O(n)
     {
         bool ret = ( (0 <= i) && (i < vCount()) &&
                     (0 <= j) && (j < vCount()) );
@@ -231,7 +230,7 @@ public:
         return ret;
     }
 
-    bool setEdge(int i, int j, const E& value)
+    bool setEdge(int i, int j, const E& value)  //O(n)
     {
         bool ret = ( (0 <= i) && (i < vCount()) &&
                      (0 <= j) && (j < vCount()) );
@@ -254,7 +253,7 @@ public:
         return ret;
     }
 
-    bool removeEdge(int i, int j)
+    bool removeEdge(int i, int j) //O(n)
     {
         bool ret = ( (0 <= i) && (i < vCount()) &&
                      (0 <= j) && (j < vCount()) );
@@ -273,13 +272,13 @@ public:
         return ret;
     }
 
-    int vCount()
+    int vCount() //O(n)
     {
         //顶点数 直接返回 顶点链表长度
         return m_list.length();
     }
 
-    int eCount()
+    int eCount() //O(n)
     {
         int ret = 0;
 
@@ -293,7 +292,7 @@ public:
     }
 
     //一个顶点的入度=每个顶点邻接链表内终点为i的数量
-    int ID(int i)
+    int ID(int i) //O(n*n)
     {
         int ret = 0;
 
@@ -322,7 +321,7 @@ public:
     }
 
     //顶点的出度：邻接链表的长度
-    int OD(int i)
+    int OD(int i)  //O(n)
     {
         int ret = 0;
 

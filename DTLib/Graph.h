@@ -4,6 +4,9 @@
 #include "Object.h"
 #include "SharedPointer.h"
 #include "Array.h"
+#include "DynamicArray.h"
+#include "LinkQueue.h"
+#include "Exception.h"
 
 namespace DTLib {
 
@@ -41,6 +44,27 @@ struct Edge : public Object
 template < typename V, typename E>
 class Graph : public Object
 {
+protected:
+    template< typename T >
+    DynamicArray<T>* toArray(LinkQueue<T>& queue)
+    {
+        DynamicArray<T>* ret = new DynamicArray<T>(queue.length());
+
+        if( ret != NULL )
+        {
+            //将队列按顺序添加到数组内
+            for(int i=0; i<ret->length(); i++, queue.remove())
+            {
+                ret->set(i, queue.front());
+            }
+        }
+        else
+        {
+            THROW_EXCEPTION(NoEnoughMemoryException, "no memory to create ret array...");
+        }
+
+        return ret;
+    }
 public:
     virtual V getVertex(int i) = 0;
     virtual bool getVertex(int i, V& value) = 0;
@@ -57,6 +81,57 @@ public:
     virtual int TD(int i)
     {
         return OD(i) + ID(i);
+    }
+
+    SharedPointer< Array<int> > BFS(int i)
+    {
+        DynamicArray<int>* ret = NULL;
+
+        if( (0 <= i) && (i < vCount()) )
+        {
+            LinkQueue<int> q; //保存正在遍历的元素
+            LinkQueue<int> r; //保存已遍历元素
+            DynamicArray<int> visited(vCount());
+
+            //初始化visited数组
+            for(int j=0; j<visited.length(); j++)
+            {
+                visited[j] = false;
+            }
+
+            q.add(i); //将遍历的头元素加入队列
+
+            while( q.length() > 0 )
+            {
+                //得到队列首元素
+                int v = q.front();
+                q.remove();
+
+                //判断是否访问过
+                if( !visited[v] )
+                {
+                    SharedPointer< Array<int> > aj = getAdjacent(v); //得到v的邻接节点
+
+                    //加入q队列
+                    for(int j=0; j<aj->length(); j++)
+                    {
+                        q.add((*aj)[j]);
+                    }
+
+                    //v加入r队列并设置成已被访问过
+                    r.add(v);
+                    visited[v] = true;
+                }
+            }
+
+            ret = toArray(r); //设置返回值
+        }
+        else
+        {
+            THROW_EXCEPTION(InvaildParamenterException, "Index i is invaild...");
+        }
+
+        return ret;
     }
 };
 

@@ -33,7 +33,7 @@ public:
 
     }
 
-    V getVertex(int i)
+    V getVertex(int i)    //O(1)
     {
         V ret;
 
@@ -47,7 +47,7 @@ public:
         return ret;
     }
 
-    bool getVertex(int i, V& value)
+    bool getVertex(int i, V& value)  //O(1)
     {
         bool ret = ( (0 <=i ) && (i < vCount()) );
 
@@ -66,7 +66,7 @@ public:
         return ret;
     }
 
-    bool setVertex(int i, const V& value)
+    bool setVertex(int i, const V& value)  //O(1)
     {
         bool ret = ( (0 <=i ) && (i < vCount()) );
 
@@ -94,7 +94,7 @@ public:
         return ret;
     }
 
-    SharedPointer< Array<int> > getAdjacent(int i)
+    SharedPointer< Array<int> > getAdjacent(int i) // O(n)
     {
         DynamicArray<int>* ret = NULL;
 
@@ -136,7 +136,7 @@ public:
         return ret;
     }
 
-    E getEdge(int i, int j)
+    E getEdge(int i, int j) //O(1)
     {
        E ret;
 
@@ -148,7 +148,7 @@ public:
        return ret;
     }
 
-    bool getEdge(int i, int j, E& value)
+    bool getEdge(int i, int j, E& value)  //O(1)
     {
         bool ret = ( (0 <= i) && (i < vCount()) &&
                      (0 <= j) && (i < vCount()) );
@@ -168,7 +168,7 @@ public:
         return ret;
     }
 
-    bool setEdge(int i, int j, const E& value)
+    bool setEdge(int i, int j, const E& value)  //O(1)
     {
         bool ret = ( (0 <= i) && (i < vCount()) &&
                      (0 <= j) && (i < vCount()) );
@@ -203,7 +203,7 @@ public:
         return ret;
     }
 
-    bool removeEdge(int i, int j)
+    bool removeEdge(int i, int j)  //O(1)
     {
         bool ret = ( (0 <= i) && (i < vCount()) &&
                      (0 <= j) && (i < vCount()) );
@@ -225,17 +225,17 @@ public:
         return ret;
     }
 
-    int vCount()
+    int vCount() //O(1)
     {
         return N;
     }
 
-    int eCount()
+    int eCount() //O(1)
     {
         return m_eCount;
     }
 
-    int OD(int i)
+    int OD(int i) //O(n)
     {
         int ret = 0;
 
@@ -258,7 +258,7 @@ public:
         return ret;
     }
 
-    int ID(int i)
+    int ID(int i)  //O(n)
     {
         int ret = 0;
 

@@ -1,5 +1,5 @@
 #include <iostream>
-#include "ListGraph.h"
+#include "MatrixGraph.h"
 
 using namespace std;
 using namespace DTLib;
@@ -7,74 +7,52 @@ using namespace DTLib;
 
 int main()
 {
-    ListGraph<char, int> g(4);
+    MatrixGraph<9, char, int> g;
+    const char VD[] = "ABEDCGFHI";
 
-    g.setVertex(0, 'A');
-    g.setVertex(1, 'B');
-    g.setVertex(2, 'C');
-    g.setVertex(3, 'D');
-
-    for(int i=0; i<g.vCount(); i++)
+    for(int i=0; i<9; i++)
     {
-        cout << i << " : " << g.getVertex(i) << endl;
+        g.setVertex(i, VD[i]);
     }
 
-    g.setEdge(0, 1, 5);
-    g.setEdge(0, 3, 5);
-    g.setEdge(1, 2, 8);
-    g.setEdge(2, 3, 2);
-    g.setEdge(3, 1, 9);
+    g.setEdge(0, 1, 0);
+    g.setEdge(1, 0, 0);
 
-    cout << "W(0, 1): " << g.getEdge(0, 1) << endl;
-    cout << "W(0, 3): " << g.getEdge(0, 3) << endl;
-    cout << "W(1, 2): " << g.getEdge(1, 2) << endl;
-    cout << "W(2, 3): " << g.getEdge(2, 3) << endl;
-    cout << "W(3, 1): " << g.getEdge(3, 1) << endl;
+    g.setEdge(0, 3, 0);
+    g.setEdge(3, 0, 0);
 
-    cout << "eCount: " << g.eCount() << endl;
+    g.setEdge(0, 4, 0);
+    g.setEdge(4, 0, 0);
 
-    SharedPointer< Array<int> > aj = g.getAdjacent(0);
+    g.setEdge(1, 2, 0);
+    g.setEdge(2, 1, 0);
 
-    for(int i=0; i<aj->length(); i++)
+    g.setEdge(1, 4, 0);
+    g.setEdge(4, 1, 0);
+
+    g.setEdge(2, 5, 0);
+    g.setEdge(5, 2, 0);
+
+    g.setEdge(3, 6, 0);
+    g.setEdge(6, 3, 0);
+
+    g.setEdge(4, 6, 0);
+    g.setEdge(6, 4, 0);
+
+    g.setEdge(6, 7, 0);
+    g.setEdge(7, 6, 0);
+
+    g.setEdge(7, 8, 0);
+    g.setEdge(8, 7, 0);
+
+    SharedPointer< Array<int> > sa = g.BFS(0);
+
+    for(int i=0; i<sa->length(); i++)
     {
-        cout << (*aj)[i] << " ";
+        cout << (*sa)[i] << " ";
     }
 
     cout << endl;
-
-    cout << "ID(1): " << g.ID(1) << endl;
-    cout << "OD(1): " << g.OD(1) << endl;
-    cout << "TD(1): " << g.TD(1) << endl;
-
-    g.removeVertex(); //删除最后一个节点
-
-    cout << "eCount: " << g.eCount() << endl;
-
-    cout << "W(0, 1): " << g.getEdge(0, 1) << endl;
-    cout << "W(1, 2): " << g.getEdge(1, 2) << endl;
-    cout << "W(2, 3): " << g.getEdge(2, 3) << endl;
-
-    /*
-
-    cout << "vCount: " << g.vCount() << endl;
-
-
-
-
-
-    cout << endl;
-
-    cout << "Delete Edge: " << endl;
-
-
-
-    cout << "eCount: " << g.eCount() << endl;
-
-    g.setVertex(0, 100);
-
-    cout << "V(0): " << g.getVertex(0) << endl;
-
-    //cout << "W(0, 1)" << g.getEdge(0, 1) << endl;*/
 
     return 0;
 }
