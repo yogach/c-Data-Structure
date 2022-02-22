@@ -4,6 +4,44 @@
 using namespace std;
 using namespace DTLib;
 
+template < typename V, typename E>
+void DFS(Graph<V, E>& g, int v, Array<bool>& visited)
+{
+    if( (0 <= v) && (v < g.vCount()) )
+    {
+        cout << v << endl; //访问顶点
+
+        SharedPointer< Array<int>> aj = g.getAdjacent(v);
+
+        visited[v] = true;
+
+        for(int j=0; j<aj->length(); j++)
+        {
+            //判断顶点是否被访问过
+            if( !visited[(*aj)[j]] )
+            {
+                DFS(g, (*aj)[j], visited); //执行遍历
+            }
+        }
+    }
+    else
+    {
+        THROW_EXCEPTION(InvalidParamenterException, "Index i is invalid...");
+    }
+}
+
+template < typename V, typename E>
+void DFS(Graph<V, E>& g, int v)
+{
+    DynamicArray<bool> visited(g.vCount());
+
+    for(int i=0; i<visited.length(); i++)
+    {
+        visited[i] = false;
+    }
+
+    DFS(g, v, visited);
+}
 
 int main()
 {
@@ -53,6 +91,8 @@ int main()
     }
 
     cout << endl;
+
+    DFS(g, 0);
 
     return 0;
 }
