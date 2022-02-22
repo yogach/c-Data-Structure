@@ -45,7 +45,7 @@ int main()
     g.setEdge(7, 8, 0);
     g.setEdge(8, 7, 0);
 
-    SharedPointer< Array<int> > sa = g.BFS(0);
+    SharedPointer< Array<int> > sa = g.DFS(0);
 
     for(int i=0; i<sa->length(); i++)
     {

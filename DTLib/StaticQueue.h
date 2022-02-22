@@ -39,7 +39,7 @@ public:
         }
         else
         {
-            THROW_EXCEPTION(InvaildOperationException, "No space in current queue...");
+            THROW_EXCEPTION(InvalidOperationException, "No space in current queue...");
         }
     }
 
@@ -52,7 +52,7 @@ public:
         }
         else
         {
-            THROW_EXCEPTION(InvaildOperationException, "No space in current queue...");
+            THROW_EXCEPTION(InvalidOperationException, "No space in current queue...");
         }
     }
 
@@ -64,7 +64,7 @@ public:
         }
         else
         {
-            THROW_EXCEPTION(InvaildOperationException, "No space in current queue...");
+            THROW_EXCEPTION(InvalidOperationException, "No space in current queue...");
         }
     }
 

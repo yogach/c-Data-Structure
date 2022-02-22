@@ -61,7 +61,7 @@ public:
         }
         else
         {
-            THROW_EXCEPTION(InvaildOperationException, "No element in current queue...");
+            THROW_EXCEPTION(InvalidOperationException, "No element in current queue...");
         }
     }
 
@@ -73,7 +73,7 @@ public:
         }
         else
         {
-            THROW_EXCEPTION(InvaildOperationException, "No element in current queue...");
+            THROW_EXCEPTION(InvalidOperationException, "No element in current queue...");
         }
     }
 

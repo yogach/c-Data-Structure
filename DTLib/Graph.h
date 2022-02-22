@@ -6,6 +6,7 @@
 #include "Array.h"
 #include "DynamicArray.h"
 #include "LinkQueue.h"
+#include "LinkStack.h"
 #include "Exception.h"
 
 namespace DTLib {
@@ -128,11 +129,62 @@ public:
         }
         else
         {
-            THROW_EXCEPTION(InvaildParamenterException, "Index i is invaild...");
+            THROW_EXCEPTION(InvalidParamenterException, "Index i is invalid...");
         }
 
         return ret;
     }
+
+    //基本流程和BFS类似 注释也类似
+    SharedPointer< Array<int> > DFS(int i)
+    {
+        DynamicArray<int>* ret = NULL;
+
+        if( (0 <= i) && (i < vCount()) )
+        {
+            LinkStack<int> s;
+            LinkQueue<int> r;
+            DynamicArray<int> visited(vCount());
+
+            for(int j=0; j<visited.length(); j++)
+            {
+                visited[j] = false;
+            }
+
+            s.push(i);
+
+            while( s.size() > 0 )
+            {
+                int v = s.top();
+
+                s.pop();
+
+                if( !visited[v] )
+                {
+                    SharedPointer< Array<int> > aj = getAdjacent(v);
+
+                    //这里变换一下位置 从后往前写入栈
+                    for(int j=aj->length()-1; j>=0; j--)
+                    {
+                        s.push((*aj)[j]);
+                    }
+
+                    r.add(v);
+                    visited[v] = true;
+                }
+            }
+
+            ret = toArray(r);
+        }
+        else
+        {
+            THROW_EXCEPTION(InvalidParamenterException, "Index i is invalid...");
+        }
+
+        return ret;
+    }
+
+
 };
 
 }

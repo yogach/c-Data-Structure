@@ -118,7 +118,7 @@ public:
         }
         else
         {
-            THROW_EXCEPTION(IndexOutOfBoundsException, "Parameter i is invaild... ");
+            THROW_EXCEPTION(IndexOutOfBoundsException, "Parameter i is invalid... ");
         }
     }
 

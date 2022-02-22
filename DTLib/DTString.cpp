@@ -207,7 +207,7 @@ String& String::insert(int i, const char* s)
     }
     else
     {
-        THROW_EXCEPTION(IndexOutOfBoundsException, "Parameter i is invaild....");
+        THROW_EXCEPTION(IndexOutOfBoundsException, "Parameter i is invalid....");
     }
 
     return *this;
@@ -333,7 +333,7 @@ String String::sub(int i, int len) const
     }
     else
     {
-        THROW_EXCEPTION(IndexOutOfBoundsException, "parameter is invaild...");
+        THROW_EXCEPTION(IndexOutOfBoundsException, "parameter is invalid...");
     }
 
     return ret;
@@ -506,7 +506,7 @@ char& String::operator [](int i)
     }
     else
     {
-        THROW_EXCEPTION(IndexOutOfBoundsException, "Parameter i is invaild....");
+        THROW_EXCEPTION(IndexOutOfBoundsException, "Parameter i is invalid....");
     }
 }
 

@@ -27,7 +27,7 @@ public:
         }
         else
         {
-            THROW_EXCEPTION(InvaildOperationException, "No element in current stack...");
+            THROW_EXCEPTION(InvalidOperationException, "No element in current stack...");
         }
     }
 
@@ -39,7 +39,7 @@ public:
         }
         else
         {
-            THROW_EXCEPTION(InvaildOperationException, "No element in current stack...");
+            THROW_EXCEPTION(InvalidOperationException, "No element in current stack...");
         }
     }
 

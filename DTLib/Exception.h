@@ -98,15 +98,15 @@ public:
 
 };
 
-class InvaildParamenterException : public Exception
+class InvalidParamenterException : public Exception
 {
 public:
-    InvaildParamenterException(const char* message) : Exception(message) {}
-    InvaildParamenterException(const char* file, int line) : Exception(file, line) {}
-    InvaildParamenterException(const char* message, const char* file, int line) : Exception(message, file, line) {}
+    InvalidParamenterException(const char* message) : Exception(message) {}
+    InvalidParamenterException(const char* file, int line) : Exception(file, line) {}
+    InvalidParamenterException(const char* message, const char* file, int line) : Exception(message, file, line) {}
 
-    InvaildParamenterException(const InvaildParamenterException& e) : Exception(e) {}
-    InvaildParamenterException& operator = (const InvaildParamenterException& e)
+    InvalidParamenterException(const InvalidParamenterException& e) : Exception(e) {}
+    InvalidParamenterException& operator = (const InvalidParamenterException& e)
     {
         Exception::operator =(e);
 
@@ -116,15 +116,15 @@ public:
 };
 
 
-class InvaildOperationException : public Exception
+class InvalidOperationException : public Exception
 {
 public:
-    InvaildOperationException(const char* message) : Exception(message) {}
-    InvaildOperationException(const char* file, int line) : Exception(file, line) {}
-    InvaildOperationException(const char* message, const char* file, int line) : Exception(message, file, line) {}
+    InvalidOperationException(const char* message) : Exception(message) {}
+    InvalidOperationException(const char* file, int line) : Exception(file, line) {}
+    InvalidOperationException(const char* message, const char* file, int line) : Exception(message, file, line) {}
 
-    InvaildOperationException(const InvaildOperationException& e) : Exception(e) {}
-    InvaildOperationException& operator = (const InvaildOperationException& e)
+    InvalidOperationException(const InvalidOperationException& e) : Exception(e) {}
+    InvalidOperationException& operator = (const InvalidOperationException& e)
     {
         Exception::operator =(e);
 

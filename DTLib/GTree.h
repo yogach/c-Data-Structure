@@ -219,13 +219,13 @@ public:
                 }
                 else
                 {
-                    THROW_EXCEPTION(InvaildOperationException, "invaild parent tree node..");
+                    THROW_EXCEPTION(InvalidOperationException, "invalid parent tree node..");
                 }
             }
         }
         else
         {
-            THROW_EXCEPTION(InvaildParamenterException, "Parameter node is NULL..");
+            THROW_EXCEPTION(InvalidParamenterException, "Parameter node is NULL..");
         }
 
         return ret;
@@ -259,7 +259,7 @@ public:
 
         if( node == NULL )
         {
-            THROW_EXCEPTION(InvaildParamenterException, "Can not find the node via parameter value..");
+            THROW_EXCEPTION(InvalidParamenterException, "Can not find the node via parameter value..");
         }
         else
         {
@@ -279,7 +279,7 @@ public:
 
         if( node == NULL )
         {
-            THROW_EXCEPTION(InvaildParamenterException, "Can not find the node via parameter value..");
+            THROW_EXCEPTION(InvalidParamenterException, "Can not find the node via parameter value..");
         }
         else
         {
@@ -375,7 +375,7 @@ public:
         }
         else
         {
-            THROW_EXCEPTION(InvaildOperationException, "No value in current position..");
+            THROW_EXCEPTION(InvalidOperationException, "No value in current position..");
         }
     }
 

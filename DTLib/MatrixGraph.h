@@ -40,7 +40,7 @@ public:
         if( !getVertex(i, ret) )
         {
 
-           THROW_EXCEPTION(InvaildParamenterException, "index i is invaild...");
+           THROW_EXCEPTION(InvalidParamenterException, "index i is invalid...");
 
         }
 
@@ -59,7 +59,7 @@ public:
             }
             else
             {
-                THROW_EXCEPTION(InvaildOperationException, "No value assigned to this vertex...");
+                THROW_EXCEPTION(InvalidOperationException, "No value assigned to this vertex...");
             }
         }
 
@@ -131,7 +131,7 @@ public:
         }
         else
         {
-            THROW_EXCEPTION(InvaildParamenterException, "index i is invaild...");
+            THROW_EXCEPTION(InvalidParamenterException, "index i is invalid...");
         }
         return ret;
     }
@@ -142,7 +142,7 @@ public:
 
        if( !getEdge(i, j, ret) )
        {
-           THROW_EXCEPTION(InvaildParamenterException, "index <i, j> is vaild...");
+           THROW_EXCEPTION(InvalidParamenterException, "index <i, j> is vaild...");
        }
 
        return ret;
@@ -161,7 +161,7 @@ public:
             }
             else
             {
-                THROW_EXCEPTION(InvaildOperationException, "No value assigned to this edge...");
+                THROW_EXCEPTION(InvalidOperationException, "No value assigned to this edge...");
             }
         }
 
@@ -252,7 +252,7 @@ public:
         }
         else
         {
-            THROW_EXCEPTION(InvaildParamenterException, "index i is invaild...");
+            THROW_EXCEPTION(InvalidParamenterException, "index i is invalid...");
         }
 
         return ret;
@@ -275,7 +275,7 @@ public:
         }
         else
         {
-            THROW_EXCEPTION(InvaildParamenterException, "index i is invaild...");
+            THROW_EXCEPTION(InvalidParamenterException, "index i is invalid...");
         }
 
         return ret;

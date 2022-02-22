@@ -126,7 +126,7 @@ public:
         }
         else
         {
-            THROW_EXCEPTION(IndexOutOfBoundsException, "Value i is invaild...");
+            THROW_EXCEPTION(IndexOutOfBoundsException, "Value i is invalid...");
         }
 
         return ret;
@@ -211,7 +211,7 @@ public:
         }
         else
         {
-            THROW_EXCEPTION(InvaildOperationException, "No Value in current position...");
+            THROW_EXCEPTION(InvalidOperationException, "No Value in current position...");
         }
     }
 

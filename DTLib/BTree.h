@@ -423,7 +423,7 @@ protected:
                 levelOrderTraversal(root(), queue);
                 break;
             default:
-                THROW_EXCEPTION(InvaildParamenterException, "Parameter order is invaild...");
+                THROW_EXCEPTION(InvalidParamenterException, "Parameter order is invalid...");
                 break;
         }
     }
@@ -485,13 +485,13 @@ public:
                 }
                 else
                 {
-                    THROW_EXCEPTION(InvaildParamenterException, "Invaild parent tree node...");
+                    THROW_EXCEPTION(InvalidParamenterException, "invalid parent tree node...");
                 }
             }
         }
         else
         {
-            THROW_EXCEPTION(InvaildParamenterException, "Parameter node can not be NULL...");
+            THROW_EXCEPTION(InvalidParamenterException, "Parameter node can not be NULL...");
         }
 
         return ret;
@@ -535,7 +535,7 @@ public:
 
         if( node == NULL )
         {
-            THROW_EXCEPTION(InvaildParamenterException, "Can not find the tree node via value...");
+            THROW_EXCEPTION(InvalidParamenterException, "Can not find the tree node via value...");
         }
         else
         {
@@ -556,7 +556,7 @@ public:
         //如果可以找到则进行删除操作
         if( node == NULL )
         {
-            THROW_EXCEPTION(InvaildParamenterException, "parameter node is invaild...");
+            THROW_EXCEPTION(InvalidParamenterException, "parameter node is invalid...");
         }
         else
         {
@@ -657,7 +657,7 @@ public:
         }
         else
         {
-            THROW_EXCEPTION(InvaildOperationException, "No value in current position..");
+            THROW_EXCEPTION(InvalidOperationException, "No value in current position..");
         }
     }
 

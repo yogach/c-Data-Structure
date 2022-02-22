@@ -37,7 +37,7 @@ public:
         }
         else
         {
-            THROW_EXCEPTION(InvaildOperationException, "No space in current stack....");
+            THROW_EXCEPTION(InvalidOperationException, "No space in current stack....");
         }
     }
 
@@ -50,7 +50,7 @@ public:
         }
         else
         {
-            THROW_EXCEPTION(InvaildOperationException, "No Element in current stack....");
+            THROW_EXCEPTION(InvalidOperationException, "No Element in current stack....");
         }
     }
 
@@ -62,7 +62,7 @@ public:
         }
         else
         {
-            THROW_EXCEPTION(InvaildOperationException, "No Element in current stack....");
+            THROW_EXCEPTION(InvalidOperationException, "No Element in current stack....");
         }
     }
 
