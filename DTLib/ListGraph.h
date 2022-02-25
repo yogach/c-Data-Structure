@@ -339,6 +339,12 @@ public:
         return ret;
     }
 
+    bool isAdjacent(int i, int j)
+    {
+        //判断i j 是否有边
+        return (0 <= i) && (i < vCount()) && (0 <= j) && (j < vCount()) && (m_list.get(i)->edge.find(Edge<E>(i, j)) >= 0);
+    }
+
     ~ListGraph()
     {
         while( m_list.length() > 0)

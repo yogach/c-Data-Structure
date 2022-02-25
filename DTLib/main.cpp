@@ -1,98 +1,103 @@
 #include <iostream>
 #include "MatrixGraph.h"
+#include "ListGraph.h"
 
 using namespace std;
 using namespace DTLib;
 
-template < typename V, typename E>
-void DFS(Graph<V, E>& g, int v, Array<bool>& visited)
+template< typename V, typename E >
+Graph<V, E>& GraphEasy()
 {
-    if( (0 <= v) && (v < g.vCount()) )
-    {
-        cout << v << endl; //访问顶点
+    static MatrixGraph<4, V, E> g;
 
-        SharedPointer< Array<int>> aj = g.getAdjacent(v);
+    g.setEdge(0, 1, 1);
+    g.setEdge(1, 0, 1);
 
-        visited[v] = true;
+    g.setEdge(0, 2, 3);
+    g.setEdge(2, 0, 3);
 
-        for(int j=0; j<aj->length(); j++)
-        {
-            //判断顶点是否被访问过
-            if( !visited[(*aj)[j]] )
-            {
-                DFS(g, (*aj)[j], visited); //执行遍历
-            }
-        }
-    }
-    else
-    {
-        THROW_EXCEPTION(InvalidParamenterException, "Index i is invalid...");
-    }
+    g.setEdge(1, 2, 1);
+    g.setEdge(2, 1, 1);
+
+    g.setEdge(1, 3, 4);
+    g.setEdge(3, 1, 4);
+
+    g.setEdge(2, 3, 1);
+    g.setEdge(3, 2, 1);
+
+    return g;
 }
 
-template < typename V, typename E>
-void DFS(Graph<V, E>& g, int v)
+template< typename V, typename E >
+Graph<V, E>& GraphComplex()
 {
-    DynamicArray<bool> visited(g.vCount());
+    static ListGraph<V, E> g(9);
 
-    for(int i=0; i<visited.length(); i++)
-    {
-        visited[i] = false;
-    }
+    g.setEdge(0, 1, 10);
+    g.setEdge(1, 0, 10);
 
-    DFS(g, v, visited);
+    g.setEdge(0, 5, 11);
+    g.setEdge(5, 0, 11);
+
+    g.setEdge(1, 2, 18);
+    g.setEdge(2, 1, 18);
+
+    g.setEdge(1, 8, 12);
+    g.setEdge(8, 1, 12);
+
+    g.setEdge(1, 6, 16);
+    g.setEdge(6, 1, 16);
+
+    g.setEdge(2, 3, 22);
+    g.setEdge(3, 2, 22);
+
+    g.setEdge(2, 8, 8);
+    g.setEdge(8, 2, 8);
+
+    g.setEdge(3, 8, 21);
+    g.setEdge(8, 3, 21);
+
+    g.setEdge(3, 6, 24);
+    g.setEdge(6, 3, 24);
+
+    g.setEdge(3, 7, 16);
+    g.setEdge(7, 3, 16);
+
+    g.setEdge(3, 4, 20);
+    g.setEdge(4, 3, 20);
+
+    g.setEdge(4, 5, 26);
+    g.setEdge(5, 4, 26);
+
+    g.setEdge(4, 7, 7);
+    g.setEdge(7, 4, 7);
+
+    g.setEdge(5, 6, 17);
+    g.setEdge(6, 5, 17);
+
+    g.setEdge(6, 7, 19);
+    g.setEdge(7, 6, 19);
+
+    return g;
 }
 
 int main()
 {
-    MatrixGraph<9, char, int> g;
-    const char VD[] = "ABEDCGFHI";
+    Graph<int, int>& g = GraphComplex<int, int>();
 
-    for(int i=0; i<9; i++)
-    {
-        g.setVertex(i, VD[i]);
-    }
+    SharedPointer< Array< Edge<int> > > sa = g.prim(65536);
 
-    g.setEdge(0, 1, 0);
-    g.setEdge(1, 0, 0);
-
-    g.setEdge(0, 3, 0);
-    g.setEdge(3, 0, 0);
-
-    g.setEdge(0, 4, 0);
-    g.setEdge(4, 0, 0);
-
-    g.setEdge(1, 2, 0);
-    g.setEdge(2, 1, 0);
-
-    g.setEdge(1, 4, 0);
-    g.setEdge(4, 1, 0);
-
-    g.setEdge(2, 5, 0);
-    g.setEdge(5, 2, 0);
-
-    g.setEdge(3, 6, 0);
-    g.setEdge(6, 3, 0);
-
-    g.setEdge(4, 6, 0);
-    g.setEdge(6, 4, 0);
-
-    g.setEdge(6, 7, 0);
-    g.setEdge(7, 6, 0);
-
-    g.setEdge(7, 8, 0);
-    g.setEdge(8, 7, 0);
-
-    SharedPointer< Array<int> > sa = g.DFS(0);
+    int w = 0;
 
     for(int i=0; i<sa->length(); i++)
     {
-        cout << (*sa)[i] << " ";
+        w += (*sa)[i].data;
+
+        cout << (*sa)[i].b << " " << (*sa)[i].e << " " << (*sa)[i].data << endl;
     }
 
-    cout << endl;
-
-    DFS(g, 0);
+    cout << "Weight: " << w << endl;
 
     return 0;
 }
+

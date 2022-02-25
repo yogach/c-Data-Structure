@@ -281,6 +281,12 @@ public:
         return ret;
     }
 
+    bool isAdjacent(int i, int j)
+    {
+        //判断i j 是否有边
+        return (0 <= i) && (i < vCount()) && (0 <= j) && (j < vCount()) && ( m_edges[i][j] != NULL );
+    }
+
     ~MatrixGraph()
     {
         for(int i=0; i<vCount(); i++)
