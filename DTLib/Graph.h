@@ -106,7 +106,7 @@ public:
         return ret;
     }
 
-    SharedPointer< Array< Edge<E> > > prim(const E& LIMIT)
+    SharedPointer< Array< Edge<E> > > prim(const E& LIMIT, bool MININUM = true)
     {
         LinkQueue< Edge<E> > ret;
 
@@ -145,7 +145,7 @@ public:
 
                 for(int j=0; j<vCount(); j++)
                 {
-                    if( !mark[j] && (cost[j] < m) )
+                    if( !mark[j] && (MININUM ? (cost[j] < m) : (cost[j] > m) ) )
                     {
                         m = cost[j]; //得到权值最小的
                         k = j; //得到与最小权值对应的顶点
@@ -166,7 +166,7 @@ public:
                     {
                         //更新k顶点相关的cost和adjvex
                         //只更新F集合的顶点 以及 权值小的
-                        if( !mark[(*aj)[j]] && (getEdge(k, (*aj)[j]) < cost[(*aj)[j]]) )
+                        if( !mark[(*aj)[j]] && (MININUM ? (getEdge(k, (*aj)[j]) < cost[(*aj)[j]]) : (getEdge(k, (*aj)[j]) > cost[(*aj)[j]])) )
                         {
                             cost[(*aj)[j]] = getEdge(k, (*aj)[j]);
                             adjVex[(*aj)[j]] = k;
