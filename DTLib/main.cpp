@@ -85,7 +85,7 @@ int main()
 {
     Graph<int, int>& g = GraphComplex<int, int>();
 
-    SharedPointer< Array< Edge<int> > > sa = g.prim(0, false);
+    SharedPointer< Array< Edge<int> > > sa = g.kruskal(false);
 
     int w = 0;
 

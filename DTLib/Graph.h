@@ -8,6 +8,7 @@
 #include "LinkQueue.h"
 #include "LinkStack.h"
 #include "Exception.h"
+#include "Sort.h"
 
 namespace DTLib {
 
@@ -40,6 +41,16 @@ struct Edge : public Object
     {
         return !(*this == obj);
     }
+
+    bool operator < (const Edge<E>& obj)
+    {
+        return (data < obj.data);
+    }
+
+    bool operator > (const Edge<E>& obj)
+    {
+        return (data > obj.data);
+    }
 };
 
 template < typename V, typename E>
@@ -65,6 +76,47 @@ protected:
         }
 
         return ret;
+    }
+
+    //返回所有的edge
+    SharedPointer< Array< Edge<E> > > getUndirectedEdge()
+    {
+        DynamicArray< Edge<E> >* ret = NULL;
+
+        if( asUndirected() )
+        {
+            LinkQueue< Edge<E> > queue;
+
+            for(int i=0; i<vCount(); i++)
+            {
+                for(int j=i; j<vCount(); j++)
+                {
+                    if( isAdjacent(i, j) ) //判断是否为邻接顶点
+                    {
+                        queue.add(Edge<E>(i, j, getEdge(i, j))); //写入队列
+                    }
+                }
+            }
+
+            ret = toArray(queue);
+        }
+        else
+        {
+            THROW_EXCEPTION(InvalidOperationException, "This function for undirected graph only...");
+        }
+
+        return ret;
+    }
+
+    int find(Array<int>& p, int v)
+    {
+        //循环查找 直到找到 前驱标记数组内值为-1的顶点
+        while( p[v] != -1 )
+        {
+            v = p[v];
+        }
+
+        return v;
     }
 public:
     virtual V getVertex(int i) = 0;
@@ -104,6 +156,41 @@ public:
         }
 
         return ret;
+    }
+
+    SharedPointer< Array< Edge<E> > > kruskal(const bool MININUN = true)
+    {
+        LinkQueue< Edge<E> > ret;
+        SharedPointer< Array< Edge<E> > > edges = getUndirectedEdge();
+        DynamicArray<int> p(vCount());
+
+        //初始化前驱标记数组
+        for(int i=0; i<p.length(); i++)
+        {
+            p[i] = -1;
+        }
+
+        Sort::Shell(*edges, MININUN); //对数组进行排序
+
+        //当边数组结束 或者 返回数组长度等于图的总的边-1时 结束整个循环
+        for(int i=0; (i<edges->length()) && (ret.length() < (vCount() - 1)); i++)
+        {
+            int b = find(p, (*edges)[i].b);
+            int e = find(p, (*edges)[i].e);
+
+            if( b != e)
+            {
+                p[e] = b;
+                ret.add((*edges)[i]);
+            }
+        }
+
+        if( ret.length() != (vCount() - 1) )
+        {
+           THROW_EXCEPTION(InvalidOperationException, "No enough edges for kruskal operator...");
+        }
+
+        return toArray(ret);
     }
 
     SharedPointer< Array< Edge<E> > > prim(const E& LIMIT, bool MININUM = true)
