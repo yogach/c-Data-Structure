@@ -327,6 +327,89 @@ public:
         return ret;
     }
 
+    SharedPointer< Array<int> > dijkstra(int i, int j, const E& LIMIT)
+    {
+        LinkQueue<int> ret;
+
+        if( (0 <= i) && (i < vCount()) && (0 <= j) && (j < vCount()) )
+        {
+            DynamicArray<E> dist(vCount()); //保存起始顶点到其他顶点间的权值
+            DynamicArray<int> path(vCount()); //保存顶点的前驱顶点
+            DynamicArray<bool> mark(vCount()); //标记顶点是否进入T集合
+
+            for(int k=0; k<vCount(); k++)
+            {
+                mark[i] = false;
+                path[i] = -1;
+
+                dist[k] = isAdjacent(i, k) ? getEdge(i, k) : LIMIT; //判断是否邻接 如果是取出权值
+            }
+
+            mark[i] = true;
+
+            for(int k=0; k<vCount(); k++)
+            {
+                E m = LIMIT;
+                int u = -1;
+
+                //找到目前dist数组内的最小值 这就得到了当前的最小路径
+                for(int w=0; w<vCount(); w++)
+                {
+                    if( (!mark[w]) && (dist[w] < m) )
+                    {
+                        m = dist[w];
+                        u = w;
+                    }
+                }
+
+                if( u == -1 )
+                {
+                    break;
+                }
+
+                mark[u] = true; //放入T集合
+
+                //通过已经找到的最小路径 去更新dist和path数组
+                for(int w=0; w<vCount(); w++)
+                {
+                    if( (!mark[w]) && isAdjacent(u, w) && ((dist[u] + getEdge(u, w) < dist[w])))
+                    {
+                        dist[w] = dist[u] + getEdge(u, w);
+                        path[w] = u;
+                    }
+                }
+            }
+
+            //通过栈 将得到的最短路径前后倒转
+            LinkStack<int> s;
+
+            s.push(j);
+
+            for(int k=path[j]; k!=-1; k=path[k])
+            {
+                s.push(k);
+            }
+
+            while( s.size() > 0)
+            {
+                ret.add(s.top());
+                s.pop();
+            }
+
+        }
+        else
+        {
+            THROW_EXCEPTION(InvalidParamenterException, "index(i, j) is invaild...");
+        }
+
+        if( ret.length() < 2 )
+        {
+            THROW_EXCEPTION(ArithmeticException, "There is no path i to j...");
+        }
+
+        return toArray(ret);
+    }
+
     //基本流程和BFS类似 注释也类似
     SharedPointer< Array<int> > DFS(int i)
     {
