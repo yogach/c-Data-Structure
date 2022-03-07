@@ -38,17 +38,35 @@ Graph<V, E>& GraphComplex()
     return g;
 }
 
+template< typename V, typename E >
+Graph<V, E>& GraphSample()
+{
+    static ListGraph<V, E> g(3);
+
+    g.setEdge(0, 1, 4);
+    g.setEdge(0, 2, 11);
+
+    g.setEdge(1, 2, 2);
+    g.setEdge(1, 0, 6);
+
+    g.setEdge(2, 0, 3);
+
+    return g;
+}
+
 int main()
 {
-    Graph<int, int>& g = GraphComplex<int, int>();
-    SharedPointer< Array<int> > p = g.dijkstra(0, 4, 65535);
+    Graph<int, int>& g = GraphSample<int, int>();
 
-    for(int i=0; i<p->length(); i++)
+    //SharedPointer< Array<int> > r = g.floyd(0, 2, 65536);
+
+    /*for(int i=0; i<r->length(); i++)
     {
-        cout << (*p)[i] << " ";
-    }
+        cout << (*r)[i] << " ";
+    }*/
 
     cout << endl;
+
     return 0;
 }
 

@@ -459,6 +459,75 @@ public:
         return ret;
     }
 
+    SharedPointer< Array<int> > floyd(int x, int y, const E& LIMIT)
+    {
+        LinkQueue<int> ret;
+
+        if( (0 <= x) && (x < vCount()) && (0 <= y) && (y < vCount()) )
+        {
+            //创建这个二维数组的时候会报错
+            DynamicArray< DynamicArray<E> > dist(vCount());
+            //初始化路径矩阵 用于保存i到j路径上所经过的第一个顶点
+            DynamicArray< DynamicArray<int> > path(vCount());
+
+            //设置动态数组的长度
+            for(int k=0; k<vCount(); k++)
+            {
+                dist[k].resize(vCount());
+                path[k].resize(vCount());
+            }
+
+            //得到邻接矩阵
+            for(int i=0; i<vCount(); i++)
+            {
+                for(int j=0; j<vCount(); j++)
+                {
+                    path[i][j] = -1;
+                    dist[i][j] = isAdjacent(i, j) ? (path[i][j] = j, getEdge(i, j)) : LIMIT;
+                }
+            }
+
+            //循环优化邻接矩阵
+            for(int k=0; k<vCount(); k++)
+            {
+                for(int i=0; i<vCount(); i++)
+                {
+                    for(int j=0; j<vCount(); j++)
+                    {
+                        //如果经过k顶点的中转后 路径长度比原先的i到j小的话
+                        if( (dist[i][k] + dist[k][j]) < dist[i][j] )
+                        {
+                            dist[i][j] = dist[i][k] + dist[k][j];
+                        }
+                    }
+                }
+            }
+
+            //使用递推的方式 推导最短路径
+            while( (x != -1) && (x != y) )
+            {
+                ret.add(x);
+                x = path[x][y];
+            }
+
+            if( x != -1 )
+            {
+                ret.add(x);
+            }
+        }
+        else
+        {
+            THROW_EXCEPTION(InvalidParamenterException, "index(i, j) is invaild...");
+        }
+
+        if( ret.length() < 2 )
+        {
+            THROW_EXCEPTION(ArithmeticException, "There is no path i to j...");
+        }
+
+        return toArray(ret);
+    }
+
 
 };
 
