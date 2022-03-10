@@ -5,10 +5,9 @@
 using namespace std;
 using namespace DTLib;
 
-int search_max_path(Graph<int, int>& g, int v, Array<int>& count, Array<int>& path, Array<bool>& mark)
+int search_max_path(Graph<int, int>& g, int v, Array<int>& count, Array< LinkList<int>* >& path, Array<bool>& mark)
 {
     int ret = 0;
-    int k = -1;
     SharedPointer< Array<int> > aj = g.getAdjacent(v); //得到v的邻接顶点数组
 
     //结束递归的条件是找不到邻接顶点
@@ -27,10 +26,18 @@ int search_max_path(Graph<int, int>& g, int v, Array<int>& count, Array<int>& pa
             num = count[(*aj)[i]];
         }
 
+        //找到最长路径
         if( ret < num )
         {
             ret = num;
-            k = (*aj)[i];
+        }
+    }
+
+    for(int i=0; i<aj->length(); i++)
+    {
+        if( ret == count[(*aj)[i]] )
+        {
+            path[v]->insert((*aj)[i]); //将所有和最长路径相等的顶点号加入到path内
         }
     }
 
@@ -38,7 +45,6 @@ int search_max_path(Graph<int, int>& g, int v, Array<int>& count, Array<int>& pa
 
     count[v] = ret; //保存最长序列长度
     mark[v] = true; //标记v位置顶点 已找到最长序列
-    path[v] = k; //k表示最长序列经过的第一个顶点
 
     return ret;
 }
@@ -68,7 +74,7 @@ SharedPointer< Graph<int, int> > create_graph(int* a, int len)
     return ret;
 }
 
-void init_array(Array<int>& count, Array<int>& path, Array<bool>& mark)
+void init_array(Array<int>& count, Array< LinkList<int>* >& path, Array<bool>& mark)
 {
     for(int i=0; i<count.length(); i++)
     {
@@ -77,7 +83,7 @@ void init_array(Array<int>& count, Array<int>& path, Array<bool>& mark)
 
     for(int i=0; i<path.length(); i++)
     {
-        path[i] = -1;
+        path[i] = new LinkList<int>();
     }
 
     for(int i=0; i<mark.length(); i++)
@@ -86,9 +92,38 @@ void init_array(Array<int>& count, Array<int>& path, Array<bool>& mark)
     }
 }
 
-void print_max_path(Graph<int, int>& g, Array<int>& count, Array<int>& path)
+void print_path(Graph<int, int>& g, int v, Array< LinkList<int>* >& path, LinkList<int>& cp)
+{
+    cp.insert(v);
+
+    //递归的终止条件是路径上没有后续顶点
+    if( path[v]->length() > 0)
+    {
+       for(path[v]->move(0); !path[v]->end(); path[v]->next())
+       {
+           print_path(g, path[v]->current(), path, cp);
+       }
+    }
+    else
+    {
+        //将cp内的顶点全部打印出来
+       cout << "Element: ";
+
+       for(cp.move(0); !cp.end(); cp.next())
+       {
+           cout << g.getVertex(cp.current()) << " ";
+       }
+
+       cout << endl;
+    }
+
+    cp.remove(cp.length() - 1); //去除最后一个顶点就相当于回溯
+}
+
+void print_max_path(Graph<int, int>& g, Array<int>& count, Array< LinkList<int>* >& path)
 {
     int max = 0;
+    LinkList<int> cp;
 
     //得到所有顶点中最长的那个不下降序列
     for(int i=0; i<count.length(); i++)
@@ -105,20 +140,12 @@ void print_max_path(Graph<int, int>& g, Array<int>& count, Array<int>& path)
     {
         if( max == count[i] )
         {
-            cout << "Element: " << g.getVertex(i) << " ";
-
-            //通过path数组 得到最长不下降序列经过的顶点
-            for(int j=path[i]; j!=-1; j=path[j])
-            {
-                cout << g.getVertex(j) << " ";
-            }
-
-            cout << endl;
+            print_path(g, i, path, cp);
         }
     }
 }
 
-void search_max_path(Graph<int, int> &g, Array<int> &count, Array<int> &path, Array<bool> &mark)
+void search_max_path(Graph<int, int> &g, Array<int> &count, Array< LinkList<int>* > &path, Array<bool> &mark)
 {
     for(int i=0; i<g.vCount(); i++)
     {
@@ -132,7 +159,7 @@ void search_max_path(Graph<int, int> &g, Array<int> &count, Array<int> &path, Ar
 void solution(int* a, int len)
 {
     DynamicArray<int> count(len);
-    DynamicArray<int> path(len);
+    DynamicArray< LinkList<int>* > path(len);
     DynamicArray<bool> mark(len);
     SharedPointer< Graph<int, int> > g;
 
@@ -147,7 +174,7 @@ void solution(int* a, int len)
 
 int main()
 {
-    int a[] = {3, 18, 7, 14, 10, 12, 23, 41, 16, 24};
+    int a[] = {1, 3, 5, 4};
     solution(a, sizeof(a)/sizeof(a[0]));
     return 0;
 }
