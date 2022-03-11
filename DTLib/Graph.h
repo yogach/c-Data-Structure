@@ -498,6 +498,7 @@ public:
                         if( (dist[i][k] + dist[k][j]) < dist[i][j] )
                         {
                             dist[i][j] = dist[i][k] + dist[k][j];
+                            path[i][j] = path[i][k];
                         }
                     }
                 }
